@@ -1,34 +1,39 @@
 <?php
+// Inclure la classe PHPMailer
+require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+require 'vendor/phpmailer/phpmailer/src/Exception.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php';
+require 'vendor/autoload.php'; // Chemin vers l'autoloader de PHPMailer
 
 $mail = new PHPMailer(true);
 
 try {
-	$mail->SMTPDebug = 2;									 
-	$mail->isSMTP();										 
-	$mail->Host	 = 'smtp.gfg.com;';				 
-	$mail->SMTPAuth = true;							 
-	$mail->Username = 'malickcheick12@gmail.com';				 
-	$mail->Password = 'password12';					 
-	$mail->SMTPSecure = 'tls';							 
-	$mail->Port	 = 587; 
+    // Paramètres SMTP pour Gmail
+    $mail->SMTPDebug = 2;
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';  // Serveur SMTP de Gmail
+    $mail->SMTPAuth = true;
+    $mail->Username = 'malickcheick12@gmail.com'; // Votre adresse email Gmail
+    $mail->Password = 'Ma@beni@brayan12'; // Votre mot de passe Gmail
+    $mail->SMTPSecure = 'tls'; // Utiliser TLS
+    $mail->Port = 587; // Port SMTP de Gmail
 
-	$mail->setFrom('malickcheick12@gmail.com', 'Malick');		 
-	$mail->addAddress('malickcheick12@gmail.com');
-	$mail->addAddress('malickcheick12@gmail.com', 'Elhaydja');
-	
-	$mail->isHTML(true);								 
-	$mail->Subject = 'Hello world!!';
-	$mail->Body = 'Je ne suis point la mauvaise personne et je vais vous donner des conseils. <b>bold</b> ';
-	$mail->AltBody = 'Body in plain text for non-HTML mail clients';
-	$mail->send();
-	echo "Mail has been sent successfully!";
+    // Expéditeur et destinataire
+    $mail->setFrom('malickcheick12@gmail.com', 'Malick');
+    $mail->addAddress('moussyabel20@gmail.com', 'Abel');
+
+    // Contenu du message
+    $mail->isHTML(true);
+    $mail->Subject = 'Test';
+    $mail->Body = 'C\'est juste un test d\'envoie email.<br>Merci.';
+
+    // Envoyer le message
+    $mail->send();
+    echo 'L\'email a été envoyé avec succès.';
 } catch (Exception $e) {
-	echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    echo 'Erreur lors de l\'envoi de l\'email : ', $mail->ErrorInfo;
 }
-
-?>
