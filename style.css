@@ -1,0 +1,56 @@
+@media(max-width: 768px) {
+    .facebook {
+        display: none;
+     }
+  
+     .twitter{
+      display: none;
+    }
+    
+    .linkedin{
+      display: none;
+    }
+  
+    .nav-link {
+      text-align: right;
+    }
+  
+    .Acceuil{
+      display: block !important;
+      color: white;
+    }
+  
+    .navbar-toggler {
+      display: block !important;
+    }
+  }
+  
+  body{
+    background-image: url('https://i.ytimg.com/vi/R9mXtzn8meE/maxresdefault.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  .facebook{
+    width: 35px;
+  }
+  
+  .twitter{
+    width: 35px;
+  }
+  
+  .linkedin{
+    width: 35px;
+  }
+  
+  .Acceuil{
+    display: none;
+  }
+  
+  .navbar-toggler {
+    display: none;
+  }
+
+  .sValide{ background-color: green; }
+
+  .sNonValide { background-color: red; }
