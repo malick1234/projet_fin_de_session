@@ -52,9 +52,8 @@ require_once "ConnexionBD.php";
   echo $username;
   echo $password;
   echo $dbname;
-  echo $port;
 
-  $cBD = mysqli_connect($servername, $username, $password, $dbname, $port);
+  $cBD = mysqli_connect($servername, $username, $password, $dbname);
 
   if (!$cBD) {
     die("La connexion à la base de données a échoué : " . mysqli_connect_error());
@@ -96,7 +95,7 @@ require_once "ConnexionBD.php";
             ?>
             <script type="text/javascript">
               alert("Erreur lors de la création du compte\nEmail déjà utilisé");
-              window.location.href = 'http://localhost/ProjetFinal/Connexion/Inscription.php';
+              window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Inscription.php';
             </script>
             <?php
           }

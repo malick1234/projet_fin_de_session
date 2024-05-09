@@ -55,15 +55,16 @@ if (isset($_SESSION["ok"]))
     }
   </script>
 
-  <?php require_once "navigationPreConnexion.php" ?>
+  <?php require_once "navigationPreConnexion.php" ;
+      require_once "ConnexionBD.php";
+  ?>
 
   <?php
   if (isset($_POST["userEmail"]) && isset($_POST["userPassword"])) {
     $email = $_POST["userEmail"];
     $password = $_POST["userPassword"];
-    require $_SERVER['DOCUMENT_ROOT'] . "ConnexionBD.php";
-    $cBD = mysqli_connect($SERVER, $USER, $PASSWORD, $DATABASE);
-    $tabUsers = mysqli_query($cBD, "SELECT Courriel, NbConnexions, NoUtilisateur, Nom, Prenom, Statut FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$password'");
+    $cBD = mysqli_connect($servername, $username, $password, $dbname);
+    $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$password'");
     $row = mysqli_fetch_assoc($tabUsers);
     if ($row != null) {
       if ($row["Statut"] != 0) {
@@ -96,6 +97,7 @@ if (isset($_SESSION["ok"]))
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
+        window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Connexion.php';
       </script>
       <?php
     }
