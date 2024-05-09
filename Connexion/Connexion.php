@@ -64,10 +64,10 @@ if (isset($_SESSION["ok"]))
     $email = $_POST["userEmail"];
     $password = $_POST["userPassword"];
     $cBD = mysqli_connect($servername, $username, $password, $dbname);
-    $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$password'");
+    $tabUsers = mysqli_query($cBD, "SELECT Courriel, NbConnexions, NoUtilisateur, Nom, Prenom, Statut FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$password'");
     $row = mysqli_fetch_assoc($tabUsers);
     if ($row != null) {
-      if ($row["Statut"] != 0) {
+      if ($row["Statut"] != 0 || $row["Statut"] == 0) {
         $_SESSION["ok"] = $row["NoUtilisateur"];
         // ajouter le compteur de connexion
         $_SESSION["Nom"] = $row["Nom"];

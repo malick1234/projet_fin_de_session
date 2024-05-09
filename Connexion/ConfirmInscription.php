@@ -48,10 +48,6 @@ require_once "ConnexionBD.php";
   $strEmail2 = $_POST["email2"];
   $strPassword = $_POST["password"];
   $strPassword2 = $_POST["password2"];
-  echo $servername;
-  echo $username;
-  echo $password;
-  echo $dbname;
 
   $cBD = mysqli_connect($servername, $username, $password, $dbname);
 
