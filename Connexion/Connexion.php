@@ -5,7 +5,9 @@ session_start();
 if (isset($_SESSION["ok"]))
   header("Location: ../Annonces/Annonces.php");
 ?>
-
+<?php require_once "navigationPreConnexion.php" ;
+      require_once "ConnexionBD.php";
+  ?>
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="../style.css">
@@ -55,17 +57,21 @@ if (isset($_SESSION["ok"]))
     }
   </script>
 
-  <?php require_once "navigationPreConnexion.php" ;
-      require_once "ConnexionBD.php";
-  ?>
-
   <?php
   if (isset($_POST["userEmail"]) && isset($_POST["userPassword"])) {
-    $email = $_POST["userEmail"];
-    $password = $_POST["userPassword"];
+    $email = strip_tags($_POST["userEmail"]);
+    $userPassword = strip_tags($_POST["userPassword"]);
     $cBD = mysqli_connect($servername, $username, $password, $dbname);
-    $tabUsers = mysqli_query($cBD, "SELECT Courriel, NbConnexions, NoUtilisateur, Nom, Prenom, Statut FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$password'");
+
+    if (!$cBD) {
+      die("La connexion à la base de données a échoué : " . mysqli_connect_error());
+    } else {
+      echo "Connexion réussie à la base de données.";
+    }
+    $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$userPassword'");
     $row = mysqli_fetch_assoc($tabUsers);
+
+    var_dump($tabUsers);
     if ($row != null) {
       if ($row["Statut"] != 0 || $row["Statut"] == 0) {
         $_SESSION["ok"] = $row["NoUtilisateur"];
@@ -86,14 +92,27 @@ if (isset($_SESSION["ok"]))
         mysqli_query($cBD, "UPDATE utilisateurs SET Nbconnexions = $int where Courriel='$email'");
         //
         if ($row["Nom"] != null && $row["Prenom"] != null) {
-          header('Location: ../Annonces/Annonces.php');
+          ?>
+      <script type="text/javascript">
+        window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
+      </script>
+      <?php
         } else if ($row["Statut"] == 1) {
-          header('Location: ../Administrateur/ModuleAdmin.php');
+          ?>
+      <script type="text/javascript">
+        window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
+      </script>
+      <?php
         } else {
-          header('Location: ../Annonces/ProfilUtilisateur.php');
+          ?>
+      <script type="text/javascript">
+        window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';
+      </script>
+      <?php
         }
       }
     } else {
+      echo $row;
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
@@ -101,6 +120,7 @@ if (isset($_SESSION["ok"]))
       </script>
       <?php
     }
+    mysqli_close($cBD);
   }
   ?>
 

@@ -20,8 +20,8 @@
   if (isset($_GET["Email"])) {
     $mailEncrypt = $_GET["Email"];
     $mailDecrypt = base64_decode($mailEncrypt);
-    require $_SERVER['DOCUMENT_ROOT'] . "ConnexionBD.php";
-    $cBD = mysqli_connect($SERVER, $USER, $PASSWORD, $DATABASE);
+    require_once "ConnexionBD.php";
+    $cBD = mysqli_connect($servername, $username, $password, $dbname);
     $query2 = mysqli_query($cBD, "SELECT Statut FROM utilisateurs WHERE Courriel='$mailDecrypt'");
     $row = mysqli_fetch_assoc($query2);
     if (mysqli_num_rows($query2) > 0 && $row["Statut"] == 0) {
