@@ -73,11 +73,12 @@ if (isset($_SESSION["ok"]))
 
     var_dump($tabUsers);
     if ($row != null) {
-      if ($row["Statut"] != 0 || $row["Statut"] == 0) {
+      if ($row["Statut"] != 0) {
         $_SESSION["ok"] = $row["NoUtilisateur"];
         // ajouter le compteur de connexion
         $_SESSION["Nom"] = $row["Nom"];
         $_SESSION["Prenom"] = $row["Prenom"];
+        $_SESSION["courriel"] = $row["Courriel"];
 
         $noUtilisateur = $row["NoUtilisateur"];
         $timeZone = new DateTimeZone("America/New_York");
@@ -103,7 +104,7 @@ if (isset($_SESSION["ok"]))
         window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
       </script>
       <?php
-        } else {
+        } else{
           ?>
       <script type="text/javascript">
         window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';

@@ -75,7 +75,7 @@ require_once "ConnexionBD.php";
                     <title>Confirmation du courriel</title>
                   </head>
                   <body>
-                    <a href=http://robotcupcake420.alwaysdata.net/Connexion/CourrielConfirme.php?Email=$mailEncrypt' class='nav-item nav-link'>Cliquer ici pour confirmer le courriel</a>
+                    <a href='http://robotcupcake420.alwaysdata.net/Connexion/CourrielConfirme.php?Email=$mailEncrypt' class='nav-item nav-link'>Cliquer ici pour confirmer le courriel</a>
                   </body>
                   </head>
                   ";
@@ -85,8 +85,8 @@ require_once "ConnexionBD.php";
             $date = date("Y-m-d H:i:s");
 
             $cBD = mysqli_connect($servername, $username, $password, $dbname);
-            $query = mysqli_query($cBD, "INSERT INTO utilisateurs (NoUtilisateur, Courriel, MotDePasse, Creation, NbConnexions, Statut) 
-                  VALUES (0, '$strEmail', '$strPassword', '$date', 0, 0)");
+            $query = mysqli_query($cBD, "INSERT INTO utilisateurs (Courriel, MotDePasse, Creation, NbConnexions, Statut) 
+                  VALUES ('$strEmail', '$strPassword', '$date', 0, 9)");
           } else {
             ?>
             <script type="text/javascript">

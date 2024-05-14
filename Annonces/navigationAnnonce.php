@@ -1,13 +1,13 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="ModuleAdmin.php">Affichage de toutes les annonces</a>
+      <a class="nav-link" href="Annonces.php">Affichage des annonces</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="Utilisateurs.php">Affichage de toutes les utilisateurs</a>
+      <a class="nav-link" href="Utilisateurs.php">Gestion des annonces</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="NettoyageBD.php">Nettoyage de la base de données</a>
+      <a class="nav-link" href="ProfilUtilisateur.php">Profil de l'utilisateur</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="btnDeconnexion" name="deconnexion" href="Deconnexion.php">Déconnexion</a>

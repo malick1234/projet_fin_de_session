@@ -1,160 +1,160 @@
 <!DOCTYPE html>
 <html lang="fr">
-<?php
-session_start();
-if (isset($_SESSION["ok"]))
-  header("Location: ../Annonces/Annonces.php");
-?>
-<?php require_once "navigationPreConnexion.php" ;
-      require_once "ConnexionBD.php";
-  ?>
+
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="../style.css">
-  <title>Connexion</title>
+  <title>Profil utilisateur</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../style.css">
 </head>
-
 <body>
 
-  <script type="text/javascript">
+<script type="text/javascript">
     function validerInformation() {
       let boolValide = true;
-      let docPassword = document.getElementById('txtUserPassword');
-      let docEmail = document.getElementById('txtUserEmail');
-      if (docPassword.value != "") {
-        var strMfPassword = "sValide";
-      }
-      else {
-        var strMfPassword = "sNonValide";
+      let docNom = document.getElementById('txtNom');
+      let docPrenom = document.getElementById('txtPrenom');
+
+      if (docNom.value != "") {
+        var strNom = "sValide";
+      } else {
+        var strNom = "sNonValide";
         boolValide = false;
       }
+    }
 
-      if (docEmail.value != "") {
-        var strMfEmail = "sValide";
-      }
+      if (docPrenom.value != "")  {
+        var strPrenom = "sValide";
       else {
-        var strMfEmail = "sNonValide";
+        var strPrenom = "sNonValide";
         boolValide = false;
       }
+    }
 
-      if (docPassword.classList.length != 1) {
-        docPassword.classList.replace(docPassword.classList[1], strMfPassword);
-        docEmail.classList.replace(docEmail.classList[1], strMfEmail);
-      }
-      else {
-        docPassword.classList.add(strMfPassword);
-        docEmail.classList.add(strMfEmail);
+      if (docNom.classList.length != 1) {
+        docNom.classList.replace(docNom.classList[1], strNom);
+        docPrenom.classList.replace(docPrenom.classList[1], strPrenom);
+      } else {
+        docNom.classList.add(strNom);
+        docPrenom.classList.add(strPrenom);
       }
 
       if (boolValide == true) {
-        document.getElementById('formConnexion').submit();
-      }
-      else {
-        alert("Veuillez remplir tout les champs");
+        document.getElementById('formProfilUtilisateur').submit()
+      } else {
+        if (docNom.value == "" || docPrenom.value == "") {
+          alert("Veuillez remplir au moins le nom et le prénom!");
       }
     }
-  </script>
+</script>
+  
+<?php require_once "navigationAnnonce.php";
+require_once "ConnexionBD.php";
+session_start();
 
-  <?php
-  if (isset($_POST["userEmail"]) && isset($_POST["userPassword"])) {
-    $email = strip_tags($_POST["userEmail"]);
-    $userPassword = strip_tags($_POST["userPassword"]);
-    $cBD = mysqli_connect($servername, $username, $password, $dbname);
+  $cBD = mysqli_connect($servername, $username, $password, $dbname);
+  $strEmail = $_SESSION["courriel"];
 
-    if (!$cBD) {
-      die("La connexion à la base de données a échoué : " . mysqli_connect_error());
-    } else {
-      echo "Connexion réussie à la base de données.";
-    }
-    $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$userPassword'");
-    $row = mysqli_fetch_assoc($tabUsers);
 
-    var_dump($tabUsers);
-    if ($row != null) {
-      if ($row["Statut"] != 0 || $row["Statut"] == 0) {
-        $_SESSION["ok"] = $row["NoUtilisateur"];
-        // ajouter le compteur de connexion
-        $_SESSION["Nom"] = $row["Nom"];
-        $_SESSION["Prenom"] = $row["Prenom"];
+if (isset($_POST)) {
+    if (
+      isset($_POST['txtNom']) && !empty($_POST['txtNom'])
+      && isset($_POST['txtPrenom']) && !empty($_POST['txtPrenom'])
+    ) {
+      $nom = strip_tags($_POST['txtNom']);
+      $prenom = strip_tags($_POST['txtPrenom']);
+      $statut = strip_tags($_POST['txtStatut']);
+      $numEmploye = strip_tags($_POST['txtNumEmploye']);
+      $telM = strip_tags($_POST['txtTelMaison']);
+      $telT = strip_tags($_POST['txtTelTravail']);
+      $telC = strip_tags($_POST['txtTelCellulaire']);
+      $autresInfos = strip_tags($_POST['txtAutresInfos']);
+            
+      date_default_timezone_set("America/New_York");
+      $date = date("Y-m-d H:i:s");
 
-        $noUtilisateur = $row["NoUtilisateur"];
-        $timeZone = new DateTimeZone("America/New_York");
-        $date = new DateTime("now", $timeZone);
-        $dateString = $date->format("Y-m-d H:i:s");
-        var_dump($dateString);
-        mysqli_query($cBD, "INSERT INTO connexions VALUES (0, $noUtilisateur, '$dateString', null)");
-        $resu = mysqli_query($cBD, "SELECT NoConnexion FROM connexions ORDER BY NoConnexion DESC LIMIT 1");
-        $reponse = mysqli_fetch_assoc($resu);
-        $_SESSION["NoConnexion"] = $reponse["NoConnexion"];
-        $int = $row["NbConnexions"] + 1;
-        mysqli_query($cBD, "UPDATE utilisateurs SET Nbconnexions = $int where Courriel='$email'");
-        //
-        if ($row["Nom"] != null && $row["Prenom"] != null) {
-          ?>
-      <script type="text/javascript">
-        window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
-      </script>
-      <?php
-        } else if ($row["Statut"] == 1) {
-          ?>
-      <script type="text/javascript">
-        window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
-      </script>
-      <?php
-        } else {
-          ?>
-      <script type="text/javascript">
-        window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';
-      </script>
-      <?php
+            $query = mysqli_query($cBD, "INSERT INTO utilisateurs (Statut, NoEmpl, Nom, Prenom, NoTelMaison, NoTelTravail, NoTelCellulaire, Modification, AutresInfos) 
+                  VALUES ('$statut', '$numEmploye', '$nom', '$prenom', '$telM', '$telT', '$telC', '$date', '$autresInfos')");
+          } else {
+            $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$strEmail'");
+            $row = mysqli_fetch_assoc($query);
+          }
         }
-      }
-    } else {
-      echo $row;
-      ?>
-      <script type="text/javascript">
-        alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Connexion.php';
-      </script>
-      <?php
-    }
-    mysqli_close($cBD);
-  }
+        else {
+          $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$strEmail'");
+          $row = mysqli_fetch_assoc($query);
+        }
   ?>
-
   <br>
-  <div class="container col-md-6 jumbotron">
-    <h2 class="text-center">Connexion</h2>
-    <form method="POST" action="Connexion.php" id="formConnexion">
+  <div class="container col-md-10 jumbotron">
+    <h2 class="text-center">Profil utilisateur</h2><br>
+    <form id="formProfilUtilisateur" method="post" action="">
       <div class="form-row">
         <div class="form-group col-md-12">
-          <label>Courriel</label>
-          <input type="email" class="form-control" id="txtUserEmail" placeholder="Courriel @" required="required"
-            name="userEmail">
-          <div class="valid-feedback">Valide</div>
-          <div class="invalid-feedback">Veuillez entrer votre Courriel</div>
+          <label><?php $strEmail ?></label>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
-          <label>Mot de passe</label>
-          <input type="password" class="form-control" id="txtUserPassword" placeholder="Mot de passe"
-            required="required" name="userPassword">
+          <label>Nom</label>
+          <input type="text" class="form-control" id="txtNom" name="nom" required="required">
           <div class="valid-feedback">Valide</div>
-          <div class="invalid-feedback">Veuillez entrer votre mot de passe</div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-12">
-            <a href="RecupMDP.php">Mot de passe oublié</a>
-          </div>
+          <div class="invalid-feedback">Nom invalide</div>
         </div>
       </div>
-      <input type="button" value="Connexion" class="btn btn-primary col-md-12" id="btnConnexion"
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label>Prénom</label>
+          <input type="text" class="form-control" id="txtPrenom" name="prenom" required="required">
+          <div class="valid-feedback">Valide</div>
+          <div class="invalid-feedback">Prénom invalide</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label>Statut</label>
+          <input type="text" class="form-control" id="txtStatut" name="statut" required="required">
+          <div class="valid-feedback">Valide</div>
+          <div class="invalid-feedback">Prénom invalide</div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label>Numéro employé</label>
+          <input type="text" class="form-control" id="txtNumEmploye" name="employe">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <label>Téléphone maison</label>
+          <input type="text" class="form-control" id="txtTelMaison" name="telephoneM">
+        </div>
+      </div>
+      <div class="form-row">
+      <div class="form-group col-md-12">
+          <label>Téléphone travail</label>
+          <input type="text" class="form-control" id="txtTelTravail" name="telephoneT">
+        </div>
+      </div>
+      <div class="form-row">
+      <div class="form-group col-md-12">
+          <label>Téléphone maison</label>
+          <input type="text" class="form-control" id="txtTelCellulaire" name="telephoneC">
+        </div>
+      </div>
+      <div class="form-row">
+      <div class="form-group col-md-12">
+          <label>Autres infos</label>
+          <input type="text" class="form-control" id="txtAutresInfos" name="autreInfo">
+        </div>
+      </div>
+      <input type="button" value="Valider" class="btn btn-primary col-md-12" id="btnInscription"
         onclick="validerInformation()">
     </form>
   </div>
+
+  <div class="container-fluid">
 
   </div>
   <footer>
@@ -167,6 +167,8 @@ if (isset($_SESSION["ok"]))
 
 
   </footer>
+
+
 </body>
 
 </html>
