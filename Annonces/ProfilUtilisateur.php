@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-
 <script type="text/javascript">
     function validerInformation() {
       let boolValide = true;
@@ -22,15 +21,13 @@
         var strNom = "sNonValide";
         boolValide = false;
       }
-    }
 
       if (docPrenom.value != "")  {
         var strPrenom = "sValide";
-      else {
+      }else {
         var strPrenom = "sNonValide";
         boolValide = false;
       }
-    }
 
       if (docNom.classList.length != 1) {
         docNom.classList.replace(docNom.classList[1], strNom);
@@ -42,13 +39,14 @@
 
       if (boolValide == true) {
         document.getElementById('formProfilUtilisateur').submit()
+        alert("Validation des données!");
       } else {
         if (docNom.value == "" || docPrenom.value == "") {
           alert("Veuillez remplir au moins le nom et le prénom!");
       }
     }
+  }
 </script>
-  
 <?php require_once "navigationAnnonce.php";
 require_once "ConnexionBD.php";
 session_start();
@@ -74,8 +72,11 @@ if (isset($_POST)) {
       date_default_timezone_set("America/New_York");
       $date = date("Y-m-d H:i:s");
 
-            $query = mysqli_query($cBD, "INSERT INTO utilisateurs (Statut, NoEmpl, Nom, Prenom, NoTelMaison, NoTelTravail, NoTelCellulaire, Modification, AutresInfos) 
-                  VALUES ('$statut', '$numEmploye', '$nom', '$prenom', '$telM', '$telT', '$telC', '$date', '$autresInfos')");
+            $query = mysqli_query($cBD, "UPDATE utilisateurs SET Statut = '$statut',
+             NoEmpl = '$numEmploye', Nom = '$nom', Prenom = '$prenom', NoTelMaison = '$telM',
+              NoTelTravail = '$telT', NoTelCellulaire = '$telC', Modification = '$date', AutresInfos = '$autresInfos'
+              WHERE Courriel='$strEmail'");
+            header('Location: Annonces.php');
           } else {
             $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$strEmail'");
             $row = mysqli_fetch_assoc($query);
@@ -92,13 +93,13 @@ if (isset($_POST)) {
     <form id="formProfilUtilisateur" method="post" action="">
       <div class="form-row">
         <div class="form-group col-md-12">
-          <label><?php $strEmail ?></label>
+        <h2 class="text-center"><?= $strEmail?></h2>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Nom</label>
-          <input type="text" class="form-control" id="txtNom" name="nom" required="required">
+          <input type="text" class="form-control" id="txtNom" name="txtNom" required="required" value="<?= $row['Nom']?>">
           <div class="valid-feedback">Valide</div>
           <div class="invalid-feedback">Nom invalide</div>
         </div>
@@ -106,7 +107,7 @@ if (isset($_POST)) {
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Prénom</label>
-          <input type="text" class="form-control" id="txtPrenom" name="prenom" required="required">
+          <input type="text" class="form-control" id="txtPrenom" name="txtPrenom" value="<?= $row['Prenom']?>" required="required">
           <div class="valid-feedback">Valide</div>
           <div class="invalid-feedback">Prénom invalide</div>
         </div>
@@ -114,7 +115,7 @@ if (isset($_POST)) {
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Statut</label>
-          <input type="text" class="form-control" id="txtStatut" name="statut" required="required">
+          <input type="text" class="form-control" id="txtStatut" name="txtStatut" required="required">
           <div class="valid-feedback">Valide</div>
           <div class="invalid-feedback">Prénom invalide</div>
         </div>
@@ -122,34 +123,34 @@ if (isset($_POST)) {
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Numéro employé</label>
-          <input type="text" class="form-control" id="txtNumEmploye" name="employe">
+          <input type="text" class="form-control" id="txtNumEmploye" name="txtNumEmploye">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Téléphone maison</label>
-          <input type="text" class="form-control" id="txtTelMaison" name="telephoneM">
+          <input type="text" class="form-control" id="txtTelMaison" name="txtTelMaison">
         </div>
       </div>
       <div class="form-row">
       <div class="form-group col-md-12">
           <label>Téléphone travail</label>
-          <input type="text" class="form-control" id="txtTelTravail" name="telephoneT">
+          <input type="text" class="form-control" id="txtTelTravail" name="txtTelTravail">
         </div>
       </div>
       <div class="form-row">
       <div class="form-group col-md-12">
           <label>Téléphone maison</label>
-          <input type="text" class="form-control" id="txtTelCellulaire" name="telephoneC">
+          <input type="text" class="form-control" id="txtTelCellulaire" name="txtTelCellulaire">
         </div>
       </div>
       <div class="form-row">
       <div class="form-group col-md-12">
           <label>Autres infos</label>
-          <input type="text" class="form-control" id="txtAutresInfos" name="autreInfo">
+          <input type="text" class="form-control" id="txtAutresInfos" name="txtAutresInfos">
         </div>
       </div>
-      <input type="button" value="Valider" class="btn btn-primary col-md-12" id="btnInscription"
+      <input type="button" value="Valider" class="btn btn-primary col-md-12" id="btnValider"
         onclick="validerInformation()">
     </form>
   </div>
@@ -164,11 +165,6 @@ if (isset($_POST)) {
         © Département d'informatique G.-G.
       </p>
     </div>
-
-
   </footer>
-
-
 </body>
-
 </html>
