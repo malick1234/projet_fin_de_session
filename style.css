@@ -54,3 +54,12 @@
   .sValide{ background-color: green; }
 
   .sNonValide { background-color: red; }
+
+  .custom-image {
+    width: 5px; /* Changer la largeur */
+    height: 5px; /* Changer la hauteur */
+    background-color: black; /* Changer le background */
+    padding: 10px; /* Ajouter un padding autour de l'image */
+    border-radius: 15px; /* Ajouter des coins arrondis */
+    object-fit: cover; /* Ajuster l'image pour qu'elle couvre l'espace */
+}

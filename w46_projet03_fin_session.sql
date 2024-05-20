@@ -116,6 +116,8 @@ ALTER TABLE `connexions`
   ADD CONSTRAINT `connexions_ibfk_1` FOREIGN KEY (`NoUtilisateur`) REFERENCES `utilisateurs` (`NoUtilisateur`);
 COMMIT;
 
+INSERT INTO `categories` (`NoCategorie`, `Description`) VALUES ('1', 'Location'), ('2', 'Recherche'), ('3', 'À donner'), ('4', 'À vendre'), ('5', 'Service offert'), ('6', 'Autre');
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

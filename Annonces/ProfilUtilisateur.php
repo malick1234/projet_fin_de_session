@@ -115,7 +115,7 @@ if (isset($_POST)) {
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Statut</label>
-          <input type="text" class="form-control" id="txtStatut" name="txtStatut" required="required">
+          <input type="text" class="form-control" id="txtStatut" name="txtStatut" value="<?= $row['Statut']?>" required="required">
           <div class="valid-feedback">Valide</div>
           <div class="invalid-feedback">Prénom invalide</div>
         </div>
@@ -123,31 +123,31 @@ if (isset($_POST)) {
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Numéro employé</label>
-          <input type="text" class="form-control" id="txtNumEmploye" name="txtNumEmploye">
+          <input type="text" class="form-control" id="txtNumEmploye" value="<?= $row['NoEmpl']?>" name="txtNumEmploye">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Téléphone maison</label>
-          <input type="text" class="form-control" id="txtTelMaison" name="txtTelMaison">
+          <input type="text" class="form-control" id="txtTelMaison" value="<?= $row['NoTelMaison']?>" name="txtTelMaison">
         </div>
       </div>
       <div class="form-row">
       <div class="form-group col-md-12">
           <label>Téléphone travail</label>
-          <input type="text" class="form-control" id="txtTelTravail" name="txtTelTravail">
+          <input type="text" class="form-control" id="txtTelTravail" value="<?= $row['NoTelTravail']?>" name="txtTelTravail">
         </div>
       </div>
       <div class="form-row">
       <div class="form-group col-md-12">
-          <label>Téléphone maison</label>
-          <input type="text" class="form-control" id="txtTelCellulaire" name="txtTelCellulaire">
+          <label>Téléphone céllulaire</label>
+          <input type="text" class="form-control" id="txtTelCellulaire" value="<?= $row['NoTelCellulaire']?>" name="txtTelCellulaire">
         </div>
       </div>
       <div class="form-row">
       <div class="form-group col-md-12">
           <label>Autres infos</label>
-          <input type="text" class="form-control" id="txtAutresInfos" name="txtAutresInfos">
+          <input type="text" class="form-control" id="txtAutresInfos" value="<?= $row['AutresInfos']?>" name="txtAutresInfos">
         </div>
       </div>
       <input type="button" value="Valider" class="btn btn-primary col-md-12" id="btnValider"

@@ -1,13 +1,14 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="nav-link" href="Annonces.php">Affichage des annonces</a>
+      <a class="nav-link" href="Annonces.php">
+      <div class="bg-secondary p-3">
+      <img src="../photos-annonce/retour.png" class="img-fluid" style="width: 25px; height: 30px;" alt="retour">
+      </div>
+       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="gestionAnnonces.php">Gestion des annonces</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="ProfilUtilisateur.php">Profil de l'utilisateur</a>
+      <a class="nav-link" href="ajoutAnnonce.php">Ajout d'une annonce</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="btnDeconnexion" name="deconnexion" href="Deconnexion.php">Déconnexion</a>
