@@ -13,40 +13,50 @@
     <script type="text/javascript">
         function validerInformation() {
             let boolValide = true;
-            let docNom = document.getElementById('txtNom');
-            let docPrenom = document.getElementById('txtPrenom');
+            let docPrix = document.getElementById('txtPrix');
+            let docDesA = document.getElementById('textDescriptionA');
+            let docDesC = document.getElementById('textDescriptionC');
 
-            if (docNom.value != "") {
-                var strNom = "sValide";
+            if (isDecimal(parseFloat(docPrix.value))) {
+                var strPrix = "sValide";
             } else {
-                var strNom = "sNonValide";
+                var strPrix = "sNonValide";
+                boolValide = false;
+            }
+            
+            if (docDesA.value != "") {
+                var strDesA = "sValide";
+            } else {
+                var strDesA = "sNonValide";
                 boolValide = false;
             }
 
-            if (docPrenom.value != "") {
-                var strPrenom = "sValide";
+            if (docDesC.value != "") {
+                var strDesC = "sValide";
             } else {
-                var strPrenom = "sNonValide";
+                var strDesC = "sNonValide";
                 boolValide = false;
             }
 
-            if (docNom.classList.length != 1) {
-                docNom.classList.replace(docNom.classList[1], strNom);
-                docPrenom.classList.replace(docPrenom.classList[1], strPrenom);
+
+            if (docPrix.classList.length != 1) {
+                docPrix.classList.replace(docPrix.classList[1], strPrix);
+                docDesA.classList.replace(docPrix.classList[1], strDesA);
+                docDesC.classList.replace(docPrix.classList[1], strDesC);
             } else {
-                docNom.classList.add(strNom);
-                docPrenom.classList.add(strPrenom);
+                docPrix.classList.add(strPrix);
+                docPrix.classList.add(strDesA);
+                docPrix.classList.add(strDesC);
             }
 
             if (boolValide == true) {
                 document.getElementById('formAjoutAnnonce').submit()
-                alert("Validation des données!");
-            } else {
-                if (docNom.value == "" || docPrenom.value == "") {
-                    alert("Veuillez remplir au moins le nom et le prénom!");
-                }
             }
         }
+
+        function isDecimal(value) {
+    return typeof value === 'number' && !Number.isNaN(value) && value % 1 !== 0;
+}
     </script>
     <?php require_once "navigationGestionAnnonce.php";
     require_once "ConnexionBD.php";
@@ -145,7 +155,7 @@
     <br>
     <div class="container col-md-10 jumbotron">
         <h2 class="text-center">Ajout d'une annonce</h2><br>
-        <form id="formAjoutAnnonce" method="post" action="">
+        <form id="formAjoutAnnonce" method="post" action="" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <h2 class="text-center"><?= $strEmail ?></h2>
