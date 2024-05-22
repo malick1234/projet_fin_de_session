@@ -66,7 +66,9 @@ $query = mysqli_query($cBD, "SELECT * FROM annonces LIMIT $start, $annoncesParPa
             $numUtilisateur = $row['NoUtilisateur'];
             $query3 = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE NoUtilisateur='$numUtilisateur'");
             $row3 = mysqli_fetch_assoc($query3);
+            #
         ?>
+        
         <div class="d-flex flex-column col-sm-4">
             <div class="p-1">No: <?= $compteur++ ?></div>
             <div class="p-1">Annonce No: <?= $row['NoAnnonce'] ?></div>
