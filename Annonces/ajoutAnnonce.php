@@ -73,6 +73,7 @@
             $name = $_FILES['file']['name'];
             $size = $_FILES['file']['size'];
             $error = $_FILES['file']['error'];
+            $width = imagesx($sourceImage);
 
             $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$strEmail'");
             $row = mysqli_fetch_assoc($query);
@@ -87,7 +88,7 @@
 
             $extensions = ['jpg', 'png', 'jpeg', 'gif'];
             //Taille max que l'on accepte
-            $maxSize = 400000;
+            $maxSize = 600000;
 
             if(in_array($extension, $extensions) && $size <= $maxSize && $error == 0){
 
@@ -95,18 +96,37 @@
                 //uniqid génère quelque chose comme ca : 5f586bf96dcd38.73540086
                 $file = $uniqueName.".".$extension;
                 //$file = 5f586bf96dcd38.73540086.jpg
-            
-                move_uploaded_file($tmpName, '../photos-annonce/'.$file);
-                createThumbnail('../photos-annonce/'.$file, '../photos-annonce/' . 'thumb_' . basename($file), 144);
-                date_default_timezone_set("America/New_York");
-                
-                $date = date("Y-m-d H:i:s");
-                $image = 'thumb_'.$file;
 
-                $query = mysqli_query($cBD, "INSERT INTO annonces (NoUtilisateur, Parution, Categorie, 
-                DescriptionAbregee, DescriptionComplete, Prix, Photo, MiseAJour, Etat) 
-              VALUES ('$numUtilisateur', '$date', '$categorie', '$desA', '$desC', '$prix', '$image', '$date', '$etat')");
-                header('Location: gestionAnnonces.php');
+                $widthImg = imagesx($sourceImage);
+                if($widthImg <= 600){
+                    move_uploaded_file($tmpName, '../photos-annonce/'.$file);
+                    createThumbnail('../photos-annonce/'.$file, '../photos-annonce/' . 'thumb_' . basename($file), 144);
+                    date_default_timezone_set("America/New_York");
+                    
+                    $date = date("Y-m-d H:i:s");
+                    $image = 'thumb_'.$file;
+    
+                    $query = mysqli_query($cBD, "INSERT INTO annonces (NoUtilisateur, Parution, Categorie, 
+                    DescriptionAbregee, DescriptionComplete, Prix, Photo, MiseAJour, Etat) 
+                  VALUES ('$numUtilisateur', '$date', '$categorie', '$desA', '$desC', '$prix', '$image', '$date', '$etat')");
+                    header('Location: gestionAnnonces.php');
+                }
+                else{
+                    ?>
+                    <script type="text/javascript">
+                        alert("Erreur! un problème est survenue avec votre image. Vérifier que la taille est inférieur à 601 pixel.");
+                  window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ajoutAnnonce.php';
+                    </script>
+                    <?php
+                }
+            }
+            else{
+                ?>
+                <script type="text/javascript">
+                    alert("Erreur! un problème est survenue avec votre image.");
+              window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ajoutAnnonce.php';
+                </script>
+                <?php
             }
         }
         else {

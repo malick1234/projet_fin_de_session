@@ -8,7 +8,7 @@
        </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="gestionAnnonces.php">Gestion d'une annonce</a>
+      <a class="nav-link" href="gestionAnnonces.php">Menu gestion</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="ajoutAnnonce.php">Ajout d'une annonce</a>
