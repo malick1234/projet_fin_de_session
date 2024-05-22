@@ -71,7 +71,7 @@ if (isset($_SESSION["ok"]))
     $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$userPassword'");
     $row = mysqli_fetch_assoc($tabUsers);
 
-    var_dump($tabUsers);
+    //var_dump($tabUsers);
     if ($row != null) {
       if ($row["Statut"] != 0) {
         $_SESSION["ok"] = $row["NoUtilisateur"];
