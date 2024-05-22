@@ -57,7 +57,62 @@ $query = mysqli_query($cBD, "SELECT * FROM annonces LIMIT $start, $annoncesParPa
         <h1><?= $strEmail ?></h1>
     </div>
     <div class="row">
+<<<<<<< Updated upstream
         <?php
+=======
+<<<<<<< HEAD
+      <?php
+      $compteur = 1;
+      while ($row = mysqli_fetch_assoc($query)) {
+        $categorie = $row['Categorie'];
+        $query2 = mysqli_query($cBD, "SELECT * FROM categories WHERE NoCategorie='$categorie'");
+        $row2 = mysqli_fetch_assoc($query2);
+        $numUtilisateur = $row['NoUtilisateur'];
+        $query3 = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE NoUtilisateur='$numUtilisateur'");
+        $row3 = mysqli_fetch_assoc($query3)
+          ?>
+        <div class="d-flex flex-column col-sm-4">
+          <div class="p-1">No: <?= $compteur++ ?></div>
+          <div class="p-1">Annonce No: <?= $row['NoAnnonce'] ?></div>
+          <div class="p-1">parut le: <?= $row['Parution'] ?></div>
+          <div class="p-1"><img src="<?= "../photos-annonce/" . $row['Photo'] ?>" class="img-fluid" alt="retour"></div>
+          <div class="p-1"><?php
+          if ($row3['Courriel'] != $strEmail) {
+            ?>
+              Nom de l'auteur: <?= $row3['Nom'] . " " . $row3['Prenom'] ?>
+              <?php
+          }
+          ?>
+          </div>
+          <div class="p-1">Catégories: <?= $row2['Description'] ?></div>
+          <div class="p-1">Description: <?= $row['DescriptionAbregee'] ?></div>
+          <div class="p-1">
+            <?php
+            if ($row['Etat'] == 1) {
+              ?>
+              État: Actif
+              <?php
+            } else if ($row['Etat'] == 2) {
+              ?>
+                État: Inactif
+              <?php
+            }
+            ?>
+          </div>
+          <div class="p-1">Prix: <?= $row['Prix'] ?></div>
+          <div class="p-1">
+            <a href="MiseAJourAnnonce.php?id=<?= $row['NoAnnonce'] ?>" class="btn btn-warning">Mise à jour d'annonce</a>
+          </div>
+          <div class="p-1">
+            <a href="retirerAnnonce.php?id=<?= $row['NoAnnonce'] ?>" class="btn btn-danger">Retrait d'annonce</a>
+          </div>
+        </div>
+        <?php
+      }
+      ?>
+=======
+        <?php
+>>>>>>> Stashed changes
         $compteur = $start + 1;
         while ($row = mysqli_fetch_assoc($query)) {
             $categorie = $row['Categorie'];
@@ -66,9 +121,13 @@ $query = mysqli_query($cBD, "SELECT * FROM annonces LIMIT $start, $annoncesParPa
             $numUtilisateur = $row['NoUtilisateur'];
             $query3 = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE NoUtilisateur='$numUtilisateur'");
             $row3 = mysqli_fetch_assoc($query3);
+<<<<<<< Updated upstream
             #
         ?>
         
+=======
+        ?>
+>>>>>>> Stashed changes
         <div class="d-flex flex-column col-sm-4">
             <div class="p-1">No: <?= $compteur++ ?></div>
             <div class="p-1">Annonce No: <?= $row['NoAnnonce'] ?></div>
@@ -91,6 +150,10 @@ $query = mysqli_query($cBD, "SELECT * FROM annonces LIMIT $start, $annoncesParPa
             <div class="p-1">Prix: <?= $row['Prix'] ?></div>
         </div>
         <?php } ?>
+<<<<<<< Updated upstream
+=======
+>>>>>>> d9f26744e65017d4377f2861c32975cee0487dd6
+>>>>>>> Stashed changes
     </div>
 
     <!-- Pagination -->

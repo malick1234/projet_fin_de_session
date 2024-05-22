@@ -2,16 +2,22 @@
   <ul class="navbar-nav">
     <li class="nav-item">
       <a class="nav-link" href="Annonces.php">
-      <div class="bg-secondary p-3">
-      <img src="../photos-annonce/retour.png" class="img-fluid" style="width: 25px; height: 30px;" alt="retour">
-      </div>
-       </a>
+        <div class="bg-secondary p-3">
+          <img src="../photos-annonce/retour.png" class="img-fluid" style="width: 25px; height: 30px;" alt="retour">
+        </div>
+      </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="gestionAnnonces.php">Menu gestion</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="ajoutAnnonce.php">Ajout d'une annonce</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="MiseAJourAnnonce.php">Mise à jour d'une annonce</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="retirerAnnonce.php">Retrait d'une annonce</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="btnDeconnexion" name="deconnexion" href="Deconnexion.php">Déconnexion</a>

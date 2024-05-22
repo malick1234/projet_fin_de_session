@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Ajout d'une annonce</title>
+    <title>Mise à jour d'une annonce</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -66,86 +66,63 @@
     $strEmail = $_SESSION["courriel"];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_FILES['file'])) {
+        if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
             $tmpName = $_FILES['file']['tmp_name'];
             $name = $_FILES['file']['name'];
             $size = $_FILES['file']['size'];
             $error = $_FILES['file']['error'];
 
-            $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$strEmail'");
-            $row = mysqli_fetch_assoc($query);
-            $numUtilisateur = $row['NoUtilisateur'];
-            $categorie = strip_tags($_POST['categories']);
-            $desA = strip_tags($_POST['txtDescriptionA']);
-            $desC = strip_tags($_POST['txtDescriptionC']);
-            $prix = (float) strip_tags($_POST['txtPrix']);
-            $etat = (int) strip_tags($_POST['etat']);
             $tabExtension = explode('.', $name);
             $extension = strtolower(end($tabExtension));
-
             $extensions = ['jpg', 'png', 'jpeg', 'gif'];
-            // Taille max que l'on accepte
             $maxSize = 400000;
 
-            if (in_array($extension, $extensions) && $size <= $maxSize && $error == 0) {
-
+            if (in_array($extension, $extensions) && $size <= $maxSize) {
                 $uniqueName = uniqid('', true);
-                // uniqid génère quelque chose comme ça : 5f586bf96dcd38.73540086
                 $file = $uniqueName . "." . $extension;
-                // $file = 5f586bf96dcd38.73540086.jpg
-    
                 move_uploaded_file($tmpName, '../photos-annonce/' . $file);
-                createThumbnail('../photos-annonce/' . $file, '../photos-annonce/' . 'thumb_' . basename($file), 144);
-                date_default_timezone_set("America/New_York");
-
-                $date = date("Y-m-d H:i:s");
-                $image = 'thumb_' . $file;
-
-                if (isset($_POST['annonceId']) && !empty($_POST['annonceId'])) {
-                    // Mise à jour de l'annonce existante
-                    $annonceId = (int) $_POST['annonceId'];
-                    $query = mysqli_query($cBD, "UPDATE annonces SET Categorie='$categorie', 
-                        DescriptionAbregee='$desA', DescriptionComplete='$desC', Prix='$prix', 
-                        Photo='$image', MiseAJour='$date', Etat='$etat' WHERE NoAnnonce='$annonceId'");
-                } else {
-                    // Insertion d'une nouvelle annonce
-                    $query = mysqli_query($cBD, "INSERT INTO annonces (NoUtilisateur, Parution, Categorie, 
-                        DescriptionAbregee, DescriptionComplete, Prix, Photo, MiseAJour, Etat) 
-                        VALUES ('$numUtilisateur', '$date', '$categorie', '$desA', '$desC', '$prix', '$image', '$date', '$etat')");
-                }
-
-                header('Location: gestionAnnonces.php');
+                $image = $file;
+            } else {
+                $image = $_POST['existingImage'];
             }
         } else {
-            $query = mysqli_query($cBD, "SELECT * FROM categories");
+            $image = $_POST['existingImage'];
         }
+
+        $annonceId = (int) $_POST['annonceId'];
+        $categorie = strip_tags($_POST['categories']);
+        $desA = strip_tags($_POST['txtDescriptionA']);
+        $desC = strip_tags($_POST['txtDescriptionC']);
+        $prix = (float) strip_tags($_POST['txtPrix']);
+        $etat = (int) strip_tags($_POST['etat']);
+
+        $date = date("Y-m-d H:i:s");
+
+        $query = mysqli_query($cBD, "UPDATE annonces SET Categorie='$categorie', DescriptionAbregee='$desA', 
+            DescriptionComplete='$desC', Prix='$prix', Photo='$image', MiseAJour='$date', Etat='$etat' 
+            WHERE NoAnnonce='$annonceId'");
+
+        header('Location: gestionAnnonces.php');
+    } elseif (isset($_GET['id'])) {
+        $annonceId = (int) $_GET['id'];
+        $queryAnnonce = mysqli_query($cBD, "SELECT * FROM annonces WHERE NoAnnonce='$annonceId'");
+        $rowAnnonce = mysqli_fetch_assoc($queryAnnonce);
+
+        if (!$rowAnnonce) {
+            echo "Annonce non trouvée.";
+            exit();
+        }
+
+        $queryCategories = mysqli_query($cBD, "SELECT * FROM categories");
     } else {
-        $query = mysqli_query($cBD, "SELECT * FROM categories");
-    }
-
-    // Fonction pour créer une vignette
-    function createThumbnail($src, $dest, $desiredWidth)
-    {
-        $sourceImage = imagecreatefromjpeg($src);
-        $width = imagesx($sourceImage);
-        $height = imagesy($sourceImage);
-
-        // Calculer la nouvelle hauteur
-        $desiredHeight = floor($height * ($desiredWidth / $width));
-
-        // Créer une nouvelle image temporaire
-        $virtualImage = imagecreatetruecolor($desiredWidth, $desiredHeight);
-
-        // Copier la source dans l'image temporaire
-        imagecopyresampled($virtualImage, $sourceImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, $width, $height);
-
-        // Sauvegarder la vignette
-        imagejpeg($virtualImage, $dest);
+        echo "<b>ID D'ANNONCE MANQUANT!!! <br/> VEUILLEZ SÉLECTIONNER UNE ANNONCE EXISTANTE.</b>";
+        exit();
     }
     ?>
+
     <br>
     <div class="container col-md-10 jumbotron">
-        <h2 class="text-center">Ajout d'une annonce</h2><br>
+        <h2 class="text-center">Mise à jour d'une annonce</h2><br>
         <form id="formAjoutAnnonce" method="post" action="" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group col-md-12">
@@ -157,17 +134,9 @@
                     <label>Catégories</label>
                     <select name="categories" required="required">
                         <?php
-                        while ($categories = mysqli_fetch_assoc($query)) {
-                            if ($categories['NoCategorie'] == 1) {
-                                ?>
-                                <option value="<?= $categories['NoCategorie'] ?>" selected><?= $categories['Description'] ?>
-                                </option>
-                                <?php
-                            } else {
-                                ?>
-                                <option value="<?= $categories['NoCategorie'] ?>"><?= $categories['Description'] ?></option>
-                                <?php
-                            }
+                        while ($categories = mysqli_fetch_assoc($queryCategories)) {
+                            $selected = $categories['NoCategorie'] == $rowAnnonce['Categorie'] ? 'selected' : '';
+                            echo "<option value='{$categories['NoCategorie']}' $selected>{$categories['Description']}</option>";
                         }
                         ?>
                     </select>
@@ -179,7 +148,7 @@
                 <div class="form-group col-md-12">
                     <label>Description abrégées</label>
                     <input type="text" class="form-control" id="txtDescriptionA" name="txtDescriptionA"
-                        required="required">
+                        required="required" value="<?= $rowAnnonce['DescriptionAbregee'] ?>">
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">Description abrégées invalide</div>
                 </div>
@@ -188,7 +157,7 @@
                 <div class="form-group col-md-12">
                     <label>Description complète</label>
                     <input type="text" class="form-control" id="txtDescriptionC" name="txtDescriptionC"
-                        required="required">
+                        required="required" value="<?= $rowAnnonce['DescriptionComplete'] ?>">
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">Description complète invalide</div>
                 </div>
@@ -196,17 +165,19 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Prix</label>
-                    <input type="text" class="form-control" id="txtPrix" name="txtPrix" required="required">
+                    <input type="text" class="form-control" id="txtPrix" name="txtPrix" required="required"
+                        value="<?= $rowAnnonce['Prix'] ?>">
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">Prix invalide</div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    <label>Televerser une photo de l'article</label>
+                    <label>Televerser une nouvelle photo de l'article (optionnel)</label>
                     <div class="form-group">
                         <label for="fileToUpload">Sélectionnez une image à téléverser :</label>
-                        <input type="file" class="form-control-file" id="file" name="file" required>
+                        <input type="file" class="form-control-file" id="file" name="file">
+                        <input type="hidden" name="existingImage" value="<?= $rowAnnonce['Photo'] ?>">
                     </div>
                 </div>
             </div>
@@ -214,14 +185,14 @@
                 <div class="form-group col-md-12">
                     <label>État</label>
                     <select name="etat" required="required">
-                        <option value="1" selected>Actif</option>
-                        <option value="2">Inactif</option>
+                        <option value="1" <?= $rowAnnonce['Etat'] == 1 ? 'selected' : '' ?>>Actif</option>
+                        <option value="2" <?= $rowAnnonce['Etat'] == 2 ? 'selected' : '' ?>>Inactif</option>
                     </select>
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">État invalide</div>
                 </div>
             </div>
-            <input type="hidden" id="annonceId" name="annonceId" value="">
+            <input type="hidden" id="annonceId" name="annonceId" value="<?= $annonceId ?>">
             <input type="button" value="Valider" class="btn btn-primary col-md-12" id="btnValider"
                 onclick="validerInformation()">
         </form>
