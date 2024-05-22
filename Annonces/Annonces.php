@@ -43,7 +43,7 @@
   ?>
   <div class="container">
     <div class="jumbotron text-center">
-      <h1>Annonce</h1>
+      <h1>Annonces</h1>
     </div>
     <form id="formAjoutAnnonce" method="post" action="" enctype="multipart/form-data">
       <div class="d-flex justify-content-around">
