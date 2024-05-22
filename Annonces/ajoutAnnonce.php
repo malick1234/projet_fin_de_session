@@ -14,8 +14,8 @@
         function validerInformation() {
             let boolValide = true;
             let docPrix = document.getElementById('txtPrix');
-            let docDesA = document.getElementById('textDescriptionA');
-            let docDesC = document.getElementById('textDescriptionC');
+            let docDesA = document.getElementById('txtDescriptionA');
+            let docDesC = document.getElementById('txtDescriptionC');
 
             if (isDecimal(parseFloat(docPrix.value))) {
                 var strPrix = "sValide";
@@ -23,7 +23,7 @@
                 var strPrix = "sNonValide";
                 boolValide = false;
             }
-            
+
             if (docDesA.value != "") {
                 var strDesA = "sValide";
             } else {
@@ -45,8 +45,8 @@
                 docDesC.classList.replace(docPrix.classList[1], strDesC);
             } else {
                 docPrix.classList.add(strPrix);
-                docPrix.classList.add(strDesA);
-                docPrix.classList.add(strDesC);
+                docDesA.classList.add(strDesA);
+                docDesC.classList.add(strDesC);
             }
 
             if (boolValide == true) {
@@ -55,8 +55,8 @@
         }
 
         function isDecimal(value) {
-    return typeof value === 'number' && !Number.isNaN(value) && value % 1 !== 0;
-}
+            return typeof value === 'number' && !Number.isNaN(value) && value % 1 !== 0;
+        }
     </script>
     <?php require_once "navigationGestionAnnonce.php";
     require_once "ConnexionBD.php";
@@ -67,89 +67,71 @@
 
     if (isset($_POST)) {
         if (
-            isset($_POST['txtNom']) && !empty($_POST['txtNom'])
-            && isset($_POST['txtPrenom']) && !empty($_POST['txtPrenom'])
+            isset($_FILES['file'])
         ) {
- 
+            $tmpName = $_FILES['file']['tmp_name'];
+            $name = $_FILES['file']['name'];
+            $size = $_FILES['file']['size'];
+            $error = $_FILES['file']['error'];
 
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $targetDir = "photos-annonce/";
-                $targetFile = $targetDir . basename($_FILES["fileToUpload"]["name"]);
-                $uploadOk = 1;
-                $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$strEmail'");
+            $row = mysqli_fetch_assoc($query);
+            $numUtilisateur = $row['NoUtilisateur'];
+            $categorie = strip_tags($_POST['categories']);
+            $desA = strip_tags($_POST['txtDescriptionA']);
+            $desC = strip_tags($_POST['txtDescriptionC']);
+            $prix = (float)strip_tags($_POST['txtPrix']);
+            $etat = (int)strip_tags($_POST['etat']);
+            $tabExtension = explode('.', $name);
+            $extension = strtolower(end($tabExtension));
+
+            $extensions = ['jpg', 'png', 'jpeg', 'gif'];
+            //Taille max que l'on accepte
+            $maxSize = 400000;
+
+            if(in_array($extension, $extensions) && $size <= $maxSize && $error == 0){
+
+                $uniqueName = uniqid('', true);
+                //uniqid génère quelque chose comme ca : 5f586bf96dcd38.73540086
+                $file = $uniqueName.".".$extension;
+                //$file = 5f586bf96dcd38.73540086.jpg
+            
+                move_uploaded_file($tmpName, '../photos-annonce/'.$file);
+                createThumbnail('../photos-annonce/'.$file, '../photos-annonce/' . 'thumb_' . basename($file), 144);
+                date_default_timezone_set("America/New_York");
                 
-                // Vérifiez si le fichier est une image
-                $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                if ($check !== false) {
-                    echo "Le fichier est une image - " . $check["mime"] . ".";
-                    $uploadOk = 1;
-                } else {
-                    echo "Le fichier n'est pas une image.";
-                    $uploadOk = 0;
-                }
-            
-                // Vérifiez si le fichier existe déjà
-                if (file_exists($targetFile)) {
-                    echo "Désolé, le fichier existe déjà.";
-                    $uploadOk = 0;
-                }
-            
-                // Limitez la taille du fichier
-                if ($_FILES["fileToUpload"]["size"] > 500000) {
-                    echo "Désolé, votre fichier est trop grand.";
-                    $uploadOk = 0;
-                }
-            
-                // Limitez les formats de fichier autorisés
-                if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                    echo "Désolé, seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.";
-                    $uploadOk = 0;
-                }
-            
-                // Vérifiez si $uploadOk est mis à 0 par une erreur
-                if ($uploadOk == 0) {
-                    echo "Désolé, votre fichier n'a pas été téléversé.";
-                } else {
-                    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
-                        echo "Le fichier " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " a été téléversé.";
-                        // Créez la vignette
-                        createThumbnail($targetFile, $targetDir . 'thumb_' . basename($_FILES["fileToUpload"]["name"]), 100);
-                    } else {
-                        echo "Désolé, une erreur s'est produite lors du téléversement de votre fichier.";
-                    }
-                }
-            }
-            
-            // Fonction pour créer une vignette
-            function createThumbnail($src, $dest, $desiredWidth) {
-                $sourceImage = imagecreatefromjpeg($src);
-                $width = imagesx($sourceImage);
-                $height = imagesy($sourceImage);
-            
-                // Calculer la nouvelle hauteur
-                $desiredHeight = floor($height * ($desiredWidth / $width));
-            
-                // Créer une nouvelle image temporaire
-                $virtualImage = imagecreatetruecolor($desiredWidth, $desiredHeight);
-            
-                // Copier la source dans l'image temporaire
-                imagecopyresampled($virtualImage, $sourceImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, $width, $height);
-            
-                // Sauvegarder la vignette
-                imagejpeg($virtualImage, $dest);
-            }
+                $date = date("Y-m-d H:i:s");
+                $image = 'thumb_'.$file;
 
-            date_default_timezone_set("America/New_York");
-            $date = date("Y-m-d H:i:s");
-
-            $query = mysqli_query($cBD, "INSERT INTO annonces (Courriel, MotDePasse, Creation, NbConnexions, Statut) 
-      VALUES ('$strEmail', '$strPassword', '$date', 0, 9)");
-            header('Location: gestionAnnonces.php');
-        } else {
+                $query = mysqli_query($cBD, "INSERT INTO annonces (NoUtilisateur, Parution, Categorie, 
+                DescriptionAbregee, DescriptionComplete, Prix, Photo, MiseAJour, Etat) 
+              VALUES ('$numUtilisateur', '$date', '$categorie', '$desA', '$desC', '$prix', '$image', '$date', '$etat')");
+                header('Location: gestionAnnonces.php');
+            }
+        }
+        else {
             $query = mysqli_query($cBD, "SELECT * FROM categories");
         }
     } else {
         $query = mysqli_query($cBD, "SELECT * FROM categories");
+    }
+    // Fonction pour créer une vignette
+    function createThumbnail($src, $dest, $desiredWidth) {
+        $sourceImage = imagecreatefromjpeg($src);
+        $width = imagesx($sourceImage);
+        $height = imagesy($sourceImage);
+
+        // Calculer la nouvelle hauteur
+        $desiredHeight = floor($height * ($desiredWidth / $width));
+
+        // Créer une nouvelle image temporaire
+        $virtualImage = imagecreatetruecolor($desiredWidth, $desiredHeight);
+
+        // Copier la source dans l'image temporaire
+        imagecopyresampled($virtualImage, $sourceImage, 0, 0, 0, 0, $desiredWidth, $desiredHeight, $width, $height);
+
+        // Sauvegarder la vignette
+        imagejpeg($virtualImage, $dest);
     }
     ?>
     <br>
@@ -187,8 +169,8 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Description abrégées</label>
-                    <input type="text" class="form-control" id="textDescriptionA" name="textDescriptionA"
-                    required="required">
+                    <input type="text" class="form-control" id="txtDescriptionA" name="txtDescriptionA"
+                        required="required">
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">Description abrégées invalide</div>
                 </div>
@@ -196,8 +178,8 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Description complète</label>
-                    <input type="text" class="form-control" id="textDescriptionC" name="textDescriptionC"
-                    required="required">
+                    <input type="text" class="form-control" id="txtDescriptionC" name="txtDescriptionC"
+                        required="required">
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">Description complète invalide</div>
                 </div>
@@ -205,8 +187,7 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Prix</label>
-                    <input type="text" class="form-control" id="txtPrix" name="txtPrix"
-                    required="required">
+                    <input type="text" class="form-control" id="txtPrix" name="txtPrix" required="required">
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">Prix invalide</div>
                 </div>
@@ -214,18 +195,18 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Televerser une photo de l'article</label>
-                        <div class="form-group">
-                            <label for="fileToUpload">Sélectionnez une image à téléverser :</label>
-                            <input type="file" class="form-control-file" id="fileToUpload" name="fileToUpload" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="fileToUpload">Sélectionnez une image à téléverser :</label>
+                        <input type="file" class="form-control-file" id="file" name="file" required>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>État</label>
                     <select name="etat" required="required">
-                                <option value="1" selected>Actif</option>
-                                <option value="2">Inactif</option>
+                        <option value="1" selected>Actif</option>
+                        <option value="2">Inactif</option>
                     </select>
                     <div class="valid-feedback">Valide</div>
                     <div class="invalid-feedback">État invalide</div>
