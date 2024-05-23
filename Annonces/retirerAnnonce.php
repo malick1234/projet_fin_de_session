@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -61,10 +61,10 @@
         <div class="jumbotron text-center">
             <h1>Retrait de l'annonce</h1>
         </div>
-        <div class="row">
-            <div class="d-flex flex-column col-sm-12">
+        <div class="d-flex justify-content-center">
+            <div class="d-flex flex-column col-sm-8">
                 <div class="p-1">Annonce No: <?= $row['NoAnnonce'] ?></div>
-                <div class="p-1">Parut le: <?= $row['Parution'] ?></div>
+                <div class="p-1">Paru le: <?= $row['Parution'] ?></div>
                 <div class="p-1"><img src="<?= "../photos-annonce/" . $row['Photo'] ?>" class="img-fluid" alt="retour">
                 </div>
                 <div class="p-1">
@@ -88,8 +88,7 @@
                             <label><b>Êtes-vous sûr de vouloir retirer cette annonce ?</b></label>
                             <div class="d-flex justify-content-between">
                                 <button type="submit" name="confirm" class="btn btn-danger">Confirmer le
-                                    retrait
-                                </button>
+                                    retrait</button>
                                 <a href="javascript:history.back()" class="btn btn-secondary">Annuler</a>
                             </div>
                         </div>
