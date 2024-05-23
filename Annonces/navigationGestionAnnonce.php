@@ -14,12 +14,6 @@
       <a class="nav-link" href="ajoutAnnonce.php">Ajout d'une annonce</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="MiseAJourAnnonce.php">Mise à jour d'une annonce</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="retirerAnnonce.php">Retrait d'une annonce</a>
-    </li>
-    <li class="nav-item">
       <a class="nav-link" id="btnDeconnexion" name="deconnexion" href="Deconnexion.php">Déconnexion</a>
     </li>
   </ul>
