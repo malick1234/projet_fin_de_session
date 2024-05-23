@@ -61,7 +61,7 @@
         <div class="jumbotron text-center">
             <h1>Retrait de l'annonce</h1>
         </div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center text-center">
             <div class="d-flex flex-column col-sm-8">
                 <div class="p-1">Annonce No: <?= $row['NoAnnonce'] ?></div>
                 <div class="p-1">Paru le: <?= $row['Parution'] ?></div>

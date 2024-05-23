@@ -89,7 +89,6 @@ $query = mysqli_query($cBD, "SELECT * FROM annonces WHERE Etat=1 LIMIT $start, $
     <?php } ?>
   </div>
 
-  <!-- Pagination -->
   <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
       <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">

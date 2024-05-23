@@ -14,7 +14,11 @@ $annoncesParPage = 10;
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $start = ($page - 1) * $annoncesParPage;
 
-$totalQuery = mysqli_query($cBD, "SELECT COUNT(*) AS total FROM annonces");
+$userQuery = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel = '$strEmail'");
+$userRow = mysqli_fetch_assoc($userQuery);
+$numUser = $userRow['NoUtilisateur'];
+
+$totalQuery = mysqli_query($cBD, "SELECT COUNT(*) AS total FROM annonces WHERE NoUtilisateur = '$numUser'");
 $totalRow = mysqli_fetch_assoc($totalQuery);
 $totalAnnonces = $totalRow['total'];
 
