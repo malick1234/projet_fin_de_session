@@ -5,9 +5,11 @@ session_start();
 if (isset($_SESSION["ok"]))
   header("Location: ../Annonces/Annonces.php");
 ?>
-<?php require_once "navigationPreConnexion.php" ;
-      require_once "ConnexionBD.php";
-  ?>
+<?php require_once "navigationPreConnexion.php";
+require_once "ConnexionBD.php";
+require_once "creationBD.php";
+?>
+
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="../style.css">
@@ -94,22 +96,22 @@ if (isset($_SESSION["ok"]))
         //
         if ($row["Nom"] != null && $row["Prenom"] != null) {
           ?>
-      <script type="text/javascript">
-        window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
-      </script>
-      <?php
+          <script type="text/javascript">
+            window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
+          </script>
+          <?php
         } else if ($row["Statut"] == 1) {
           ?>
-      <script type="text/javascript">
-        window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
-      </script>
-      <?php
-        } else{
+            <script type="text/javascript">
+              window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
+            </script>
+          <?php
+        } else {
           ?>
-      <script type="text/javascript">
-        window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';
-      </script>
-      <?php
+            <script type="text/javascript">
+              window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';
+            </script>
+          <?php
         }
       }
     } else {
