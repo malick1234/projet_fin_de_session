@@ -7,7 +7,7 @@ if (isset($_SESSION["ok"]))
 ?>
 <?php require_once "navigationPreConnexion.php";
 require_once "ConnexionBD.php";
-require_once "creationBD.php";
+//require_once "creationBD.php";
 ?>
 
 <head>
