@@ -174,7 +174,7 @@ $categoriesQuery = mysqli_query($cBD, "SELECT * FROM categories");
       <div class="p-1">Parut le: <?= $row['Parution'] ?></div>
       <div class="p-1"><img src="<?= "../photos-annonce/" . $row['Photo'] ?>" class="img-fluid" alt="Annonce"></div>
       <div class="p-1"><?php if ($row['Courriel'] != $strEmail) { ?>
-        <p>Nom de l'auteur: <?= $row['Nom'] . " " . $row['Prenom'] ?></p>
+        Nom de l'auteur: <?= $row['Nom'] . " " . $row['Prenom'] ?>
       <?php } ?></div>
       <div class="p-1">Catégorie: <?= $row['CategorieDescription'] ?></div>
       <div class="p-1">Description:<a href="detailsAnnonce.php?id=<?= $row['NoAnnonce'] ?>"> <?= $row['DescriptionAbregee'] ?></a></div>

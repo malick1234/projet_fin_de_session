@@ -102,7 +102,7 @@ $query = mysqli_query($cBD, "SELECT annonces.*, categories.Description AS Catego
                 <div class="p-1">Paru le: <?= $row['Parution'] ?></div>
                 <div class="p-1"><img src="<?= "../photos-annonce/" . $row['Photo'] ?>" class="img-fluid" alt="Annonce"></div>
                 <div class="p-1"><?php if ($row['NoUtilisateur'] != $numUser) { ?>
-                    <p>Nom de l'auteur: <?= $row['Nom'] . " " . $row['Prenom'] ?></p>
+                    Nom de l'auteur: <?= $row['Nom'] . " " . $row['Prenom'] ?>
                 <?php } ?></div>
                 <div class="p-1">Catégorie: <?= $row['CategorieDescription'] ?></div>
                 <div class="p-1">Description:<a href="detailsAnnonce.php"> <?= $row['DescriptionAbregee'] ?></a></div>

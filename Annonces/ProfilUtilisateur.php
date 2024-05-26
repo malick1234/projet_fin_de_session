@@ -115,7 +115,12 @@ if (isset($_POST)) {
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Statut</label>
-          <input type="text" class="form-control" id="txtStatut" name="txtStatut" value="<?= $row['Statut']?>" required="required">
+          <select name="txtStatut">
+                        <option value="2" <?= $row['Statut'] == 2 ? 'selected' : '' ?>>Cadre</option>
+                        <option value="3" <?= $row['Statut'] == 3 ? 'selected' : '' ?>>Employé de soutien</option>
+                        <option value="4" <?= $row['Statut'] == 4 ? 'selected' : '' ?>>Enseignant</option>
+                        <option value="5" <?= $row['Statut'] == 5 ? 'selected' : '' ?>>Professionel</option>
+                    </select>
           <div class="valid-feedback">Valide</div>
           <div class="invalid-feedback">Prénom invalide</div>
         </div>
