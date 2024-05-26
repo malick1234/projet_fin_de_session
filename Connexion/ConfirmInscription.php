@@ -38,7 +38,7 @@ require_once "ConnexionBD.php";
   $mail->Host = 'smtp.gmail.com';  // Entrez votre serveur SMTP
   $mail->SMTPAuth = true;
   $mail->Username = 'maximedrogue@gmail.com'; // Entrez votre adresse email
-  $mail->Password = 'Maxime123'; // Entrez votre mot de passe
+  $mail->Password = 'cuoa ynzr tgzn zdpx'; // Entrez votre mot de passe
   $mail->SMTPSecure = 'tls'; // TLS ou SSL
   $mail->Port = 587; // Port SMTP
   
@@ -48,6 +48,7 @@ require_once "ConnexionBD.php";
   $strEmail2 = $_POST["email2"];
   $strPassword = $_POST["password"];
   $strPassword2 = $_POST["password2"];
+  $nbValidation = 1;
 
   $cBD = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -64,7 +65,6 @@ require_once "ConnexionBD.php";
       if ($strEmail == $strEmail2) {
         if (filter_var($strEmail, FILTER_VALIDATE_EMAIL)) {
           if (mysqli_num_rows($query) == 0) {
-            $mailEncrypt = base64_encode($strEmail);
             $mail->addAddress($strEmail, 'recipient');
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
@@ -75,18 +75,18 @@ require_once "ConnexionBD.php";
                     <title>Confirmation du courriel</title>
                   </head>
                   <body>
-                    <a href='http://robotcupcake420.alwaysdata.net/Connexion/CourrielConfirme.php?Email=$mailEncrypt' class='nav-item nav-link'>Cliquer ici pour confirmer le courriel</a>
+                    <a href='http://localhost/Projet_Fin_De_Session/Connexion/validationReussi.php?nbValidation=$nbValidation&strMail=$strEmail' class='nav-item nav-link'>Cliquer ici pour confirmer le courriel</a>
                   </body>
                   </head>
                   ";
-            //$mail->send();
-  
+            $mail->send();
             date_default_timezone_set("America/New_York");
             $date = date("Y-m-d H:i:s");
+            $nbValidation++;
 
             $cBD = mysqli_connect($servername, $username, $password, $dbname);
             $query = mysqli_query($cBD, "INSERT INTO utilisateurs (Courriel, MotDePasse, Creation, NbConnexions, Statut) 
-                  VALUES ('$strEmail', '$strPassword', '$date', 0, 9)");
+                  VALUES ('$strEmail', '$strPassword', '$date', 0, 0)");
           } else {
             ?>
             <script type="text/javascript">

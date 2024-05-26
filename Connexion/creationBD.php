@@ -1,5 +1,4 @@
 <?php
-
 // Crée une connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
 

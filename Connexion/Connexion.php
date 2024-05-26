@@ -97,12 +97,14 @@ require_once "ConnexionBD.php";
         if ($row["Nom"] != null && $row["Prenom"] != null) {
           ?>
           <script type="text/javascript">
+            alert("Veuillez cliquez sur le lien envoyé à votre courriel");
             window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
           </script>
           <?php
         } else if ($row["Statut"] == 1) {
           ?>
             <script type="text/javascript">
+              alert("Veuillez cliquez sur le lien envoyé à votre courriel");
               window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
             </script>
           <?php

@@ -2,10 +2,9 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-
-require 'PHPMailer-6.8.0/PHPMailer-6.8.0/src/Exception.php';
-require 'PHPMailer-6.8.0/PHPMailer-6.8.0/src/PHPMailer.php';
-require 'PHPMailer-6.8.0/PHPMailer-6.8.0/src/SMTP.php';
+require '../vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require '../vendor/phpmailer/phpmailer/src/SMTP.php';
+require '../vendor/phpmailer/phpmailer/src/Exception.php';
 
 ?>
 <!DOCTYPE html>
@@ -16,7 +15,9 @@ require 'PHPMailer-6.8.0/PHPMailer-6.8.0/src/SMTP.php';
     <title>Récupération</title>
 
 <body>
-    <?php require_once "navigationPreConnexion.php" ?>
+    <?php require_once "navigationPreConnexion.php"; 
+        require_once "ConnexionBD.php";
+        ?>
     <br>
     <div class="container col-md-6 jumbotron">
         <h2 class="text-center">Récupération du Mot de Passe</h2>
@@ -73,17 +74,16 @@ if (isset($_POST["txtEmail"])) {
     $mail = new PHPMailer(true);
     //$mail->SMTPDebug = 3;
     $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
+    $mail->Host = 'smtp.gmail.com';  // Entrez votre serveur SMTP
     $mail->SMTPAuth = true;
-    $mail->Username = 'robotcupcake420@gmail.com';
-    $mail->Password = 'wridpjxrbiywbiqn';
-    $mail->SMTPSecure = 'tls';
-    $mail->Port = 25;
+    $mail->Username = 'maximedrogue@gmail.com'; // Entrez votre adresse email
+    $mail->Password = 'cuoa ynzr tgzn zdpx'; // Entrez votre mot de passe
+    $mail->SMTPSecure = 'tls'; // TLS ou SSL
+    $mail->Port = 587; // Port SMTP
 
-    $mail->setFrom('robotcupcake420@gmail.com', 'robotCupcake');
+    $mail->setFrom('maximedrogue@gmail.com', 'Application');
 
-    require $_SERVER['DOCUMENT_ROOT'] . "ConnexionBD.php";
-    $cBD = mysqli_connect($SERVER, $USER, $PASSWORD, $DATABASE);
+    $cBD = mysqli_connect($servername, $username, $password, $dbname);
     $query = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email'");
     if (mysqli_num_rows($query) == 1) {
         $utilisateur = mysqli_fetch_row($query);

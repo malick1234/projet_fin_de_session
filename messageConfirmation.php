@@ -16,13 +16,13 @@ try {
     $mail->Host = 'smtp.gmail.com';  // Entrez votre serveur SMTP
     $mail->SMTPAuth = true;
     $mail->Username = 'maximedrogue@gmail.com'; // Entrez votre adresse email
-    $mail->Password = 'Maxime123'; // Entrez votre mot de passe
+    $mail->Password = 'cuoa ynzr tgzn zdpx'; // Entrez votre mot de passe
     $mail->SMTPSecure = 'tls'; // TLS ou SSL
     $mail->Port = 587; // Port SMTP
 
     // Expéditeur et destinataire
-    $mail->setFrom('malickcheick12@gmail.com', 'Malick');
-    $mail->addAddress('moussyabel20@gmail.com', 'Abel');
+    $mail->setFrom('maximedrogue@gmail.com', 'Site Annonce Abel&Malick');
+    $mail->addAddress('malickcheick12@gmail.com', 'Malick');
 
     // Contenu du message
     $mail->isHTML(true);
