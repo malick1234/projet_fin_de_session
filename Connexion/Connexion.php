@@ -2,9 +2,12 @@
 <html lang="fr">
 <?php
 session_start();
+if (isset($_SESSION["ok"]))
+  header("Location: ../Annonces/Annonces.php");
 ?>
 <?php require_once "navigationPreConnexion.php";
 require_once "ConnexionBD.php";
+//require_once "creationBD.php";
 ?>
 
 <head>
@@ -48,7 +51,6 @@ require_once "ConnexionBD.php";
       }
 
       if (boolValide == true) {
-        alert("Je suis valider");
         document.getElementById('formConnexion').submit();
       }
       else {
@@ -58,6 +60,7 @@ require_once "ConnexionBD.php";
   </script>
 
   <?php
+  if (isset($_POST["userEmail"]) && isset($_POST["userPassword"])) {
     $email = strip_tags($_POST["userEmail"]);
     $userPassword = strip_tags($_POST["userPassword"]);
     $cBD = mysqli_connect($servername, $username, $password, $dbname);
@@ -70,6 +73,7 @@ require_once "ConnexionBD.php";
     $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$userPassword'");
     $row = mysqli_fetch_assoc($tabUsers);
 
+    //var_dump($tabUsers);
     if ($row != null) {
       if ($row["Statut"] != 0) {
         $_SESSION["ok"] = $row["NoUtilisateur"];
@@ -89,25 +93,24 @@ require_once "ConnexionBD.php";
         $_SESSION["NoConnexion"] = $reponse["NoConnexion"];
         $int = $row["NbConnexions"] + 1;
         mysqli_query($cBD, "UPDATE utilisateurs SET Nbconnexions = $int where Courriel='$email'");
-
-        if ($row["Statut"] == 1) {
+        //
+        if ($row["Nom"] != null && $row["Prenom"] != null) {
           ?>
           <script type="text/javascript">
-            header("Location: ../Administrateur/ModuleAdmin.php");
+            window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
           </script>
           <?php
-        } else if ($row["Statut"] == 9) {
+        } else if ($row["Statut"] == 1) {
           ?>
             <script type="text/javascript">
-              header("Location: ../Annonces/ProfilUtilisateur.php");
+              window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
             </script>
           <?php
-        } else if ($row["Statut"] != 0) {
+        } else {
           ?>
-              <script type="text/javascript">
-                alert($row["Statut"]);
-                header("Location: ../Annonces/Annonces.php");
-              </script>
+            <script type="text/javascript">
+              window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';
+            </script>
           <?php
         }
       }
@@ -116,17 +119,18 @@ require_once "ConnexionBD.php";
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        header("Location: ../Connexion/Connexion.php");
+        window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Connexion.php';
       </script>
       <?php
     }
     mysqli_close($cBD);
+  }
   ?>
 
   <br>
   <div class="container col-md-6 jumbotron">
     <h2 class="text-center">Connexion</h2>
-    <form method="POST" action="" id="formConnexion">
+    <form method="POST" action="Connexion.php" id="formConnexion">
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Courriel</label>
