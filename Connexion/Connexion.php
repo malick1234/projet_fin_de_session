@@ -48,6 +48,7 @@ require_once "ConnexionBD.php";
       }
 
       if (boolValide == true) {
+        alert("Je suis valider");
         document.getElementById('formConnexion').submit();
       }
       else {
@@ -57,7 +58,6 @@ require_once "ConnexionBD.php";
   </script>
 
   <?php
-  if (isset($_POST["userEmail"]) && isset($_POST["userPassword"])) {
     $email = strip_tags($_POST["userEmail"]);
     $userPassword = strip_tags($_POST["userPassword"]);
     $cBD = mysqli_connect($servername, $username, $password, $dbname);
@@ -70,7 +70,6 @@ require_once "ConnexionBD.php";
     $tabUsers = mysqli_query($cBD, "SELECT * FROM utilisateurs WHERE Courriel='$email' AND MotDePasse='$userPassword'");
     $row = mysqli_fetch_assoc($tabUsers);
 
-    //var_dump($tabUsers);
     if ($row != null) {
       if ($row["Statut"] != 0) {
         $_SESSION["ok"] = $row["NoUtilisateur"];
@@ -94,20 +93,20 @@ require_once "ConnexionBD.php";
         if ($row["Statut"] == 1) {
           ?>
           <script type="text/javascript">
-            header("Location: http://abelmalick.alwaysdata.net/Administrateur/ModuleAdmin.php");
+            header("Location: ../Administrateur/ModuleAdmin.php");
           </script>
           <?php
         } else if ($row["Statut"] == 9) {
           ?>
             <script type="text/javascript">
-              header("Location: http://abelmalick.alwaysdata.net/Annonces/ProfilUtilisateur.php");
+              header("Location: ../Annonces/ProfilUtilisateur.php");
             </script>
           <?php
         } else if ($row["Statut"] != 0) {
           ?>
               <script type="text/javascript">
-                alert("hello!");
-                header("Location: http://abelmalick.alwaysdata.net/Annonces/Annonces.php");
+                alert($row["Statut"]);
+                header("Location: ../Annonces/Annonces.php");
               </script>
           <?php
         }
@@ -117,12 +116,11 @@ require_once "ConnexionBD.php";
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        header("Location: http://abelmalick.alwaysdata.net/Connexion/Connexion.php");
+        header("Location: ../Connexion/Connexion.php");
       </script>
       <?php
     }
     mysqli_close($cBD);
-  }
   ?>
 
   <br>
