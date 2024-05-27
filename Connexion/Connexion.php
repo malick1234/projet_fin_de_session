@@ -92,23 +92,11 @@ require_once "ConnexionBD.php";
         mysqli_query($cBD, "UPDATE utilisateurs SET Nbconnexions = $int where Courriel='$email'");
         //
         if ($row["Statut"] == 1) {
-          ?>
-          <script type="text/javascript">
-            header('Location: ../Administrateur/ModuleAdmin.php');
-          </script>
-          <?php
+          header('Location: ../Administrateur/ModuleAdmin.php');
         } else if ($row["Nom"] != null && $row["Prenom"] != null) {
-          ?>
-            <script type="text/javascript">
-              window.location.href = '../Annonces/Annonces.php';
-            </script>
-          <?php
+          header('Location: ../Annonces/Annonces.php');
         } else {
-          ?>
-            <script type="text/javascript">
-              window.location.href = '../Annonces/ProfilUtilisateur.php';
-            </script>
-          <?php
+          header('Location: ../Annonces/ProfilUtilisateur.php');
         }
       }
     } else {
@@ -116,7 +104,7 @@ require_once "ConnexionBD.php";
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        window.location.href = '../Connexion/Connexion.php';
+        header('../Connexion/Connexion.php');
       </script>
       <?php
     }
