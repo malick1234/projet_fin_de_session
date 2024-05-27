@@ -5,6 +5,7 @@
 session_start();
 if (!isset($_SESSION["ok"])) {
     header('Location: ../Connexion/Connexion.php');
+    exit;
 }
 
 ?>
@@ -19,132 +20,135 @@ if (!isset($_SESSION["ok"])) {
 </head>
 
 <body>
-    <?php require_once "navigationAdmin.php" ?>
+    <?php require_once "navigationAdmin.php"; ?>
     <div class="container-fluid">
-        <div class="col-xs-6">
-            <h2 class="sub-header">Utilisateurs inactifs à supprimer de la BD</h2>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="col-md-1">Numéro de l'utilisateur</th>
-                            <th class="col-md-2">Courriel</th>
-                            <th class="col-md-3">Date de création</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        require $_SERVER['DOCUMENT_ROOT'] . "ConnexionBD.php";
+        <div class="row">
+            <div class="col-xs-6">
+                <h2 class="sub-header">Utilisateurs inactifs à supprimer de la BD</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">Numéro de l'utilisateur</th>
+                                <th class="col-md-2">Courriel</th>
+                                <th class="col-md-3">Date de création</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            require ("connexionBD.php");
 
-                        $conn = new mysqli($SERVER, $USER, $PASSWORD, $DATABASE);
-                        // Vérification de la connexion
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
-                        }
+                            $conn = new mysqli($servername, $username, $password, $dbname);
 
-                        $sql = "SELECT NoUtilisateur, Courriel, Creation 
-                        from utilisateurs where Creation < now() - interval 3 month and Statut = 0";
-
-                        $resultat = $conn->query($sql);
-
-                        if ($resultat) {
-                            while ($util = mysqli_fetch_object($resultat)) {
-                                $no = $util->NoUtilisateur;
-                                $courriel = $util->Courriel;
-                                $creation = $util->Creation;
-                                ?>
-                                <tr>
-                                    <td><?php echo $no; ?></td>
-                                    <td><?php echo $courriel; ?></td>
-                                    <td><?php echo $creation; ?></td>
-                                </tr>
-                                <?php
+                            if ($conn->connect_error) {
+                                die("Connection failed: " . $conn->connect_error);
                             }
-                        } else {
-                            echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-            <form method="post" onsubmit="return confirmSupprimerUtilisateur()">
-                <button id="btnSupprimerUtilisateurs" name="btnSupprimerUtilisateurs" type="submit"
-                    class="btn btn-primary">Supprimer les utilisateurs inactifs</button>
-            </form>
-        </div>
-        <div class="col-xs-6">
-            <h2 class="sub-header">Annonces retirées à supprimer de la BD</h2>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th class="col-md-1">Numéro de l'annonce</th>
-                            <th class="col-md-2">Numéro de l'utilisateur</th>
-                            <th class="col-md-3">Date de parution de l'annonce</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $sql2 = "SELECT NoAnnonce, NoUtilisateur, Parution from annonces where Etat = 3";
 
-                        $resultat2 = $conn->query($sql2);
+                            $sql = "SELECT NoUtilisateur, Courriel, Creation 
+                                    FROM utilisateurs 
+                                    WHERE Creation < NOW() - INTERVAL 3 MONTH AND Statut = 0";
 
-                        if ($resultat2) {
-                            while ($annonce = mysqli_fetch_object($resultat2)) {
-                                $noAnnonce = $annonce->NoAnnonce;
-                                $noUtilisateur = $annonce->NoUtilisateur;
-                                $parution = $annonce->Parution;
-                                ?>
-                                <tr>
-                                    <td><?php echo $noAnnonce; ?></td>
-                                    <td><?php echo $noUtilisateur; ?></td>
-                                    <td><?php echo $parution; ?></td>
-                                </tr>
-                                <?php
+                            $resultat = $conn->query($sql);
+
+                            if ($resultat) {
+                                while ($util = mysqli_fetch_object($resultat)) {
+                                    $no = $util->NoUtilisateur;
+                                    $courriel = $util->Courriel;
+                                    $creation = $util->Creation;
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $no; ?></td>
+                                        <td><?php echo $courriel; ?></td>
+                                        <td><?php echo $creation; ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                echo "Error: " . $sql . "<br>" . $conn->error;
                             }
-                        } else {
-                            echo "Error: " . $sql2 . "<br>" . $conn->error;
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <form method="post" onsubmit="return confirm('Voulez-vous supprimer les utilisateurs inactifs ?')">
+                    <button id="btnSupprimerUtilisateurs" name="btnSupprimerUtilisateurs" type="submit"
+                        class="btn btn-primary">Supprimer les utilisateurs inactifs</button>
+                </form>
             </div>
-            <form method="post">
-                <button id="btnSupprimerAnnonces" name="btnSupprimerAnnonces" type="submit"
-                    class="btn btn-primary">Supprimer les annonces retirées</button>
-            </form>
+            <div class="col-xs-6">
+                <h2 class="sub-header">Annonces retirées à supprimer de la BD</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">Numéro de l'annonce</th>
+                                <th class="col-md-2">Numéro de l'utilisateur</th>
+                                <th class="col-md-3">Date de parution de l'annonce</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql2 = "SELECT NoAnnonce, NoUtilisateur, Parution 
+                                     FROM annonces 
+                                     WHERE Etat = 3";
+
+                            $resultat2 = $conn->query($sql2);
+
+                            if ($resultat2) {
+                                while ($annonce = mysqli_fetch_object($resultat2)) {
+                                    $noAnnonce = $annonce->NoAnnonce;
+                                    $noUtilisateur = $annonce->NoUtilisateur;
+                                    $parution = $annonce->Parution;
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $noAnnonce; ?></td>
+                                        <td><?php echo $noUtilisateur; ?></td>
+                                        <td><?php echo $parution; ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
+                                echo "Error: " . $sql2 . "<br>" . $conn->error;
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <form method="post" onsubmit="return confirm('Voulez-vous supprimer les annonces retirées ?')">
+                    <button id="btnSupprimerAnnonces" name="btnSupprimerAnnonces" type="submit"
+                        class="btn btn-primary">Supprimer les annonces retirées</button>
+                </form>
+            </div>
         </div>
     </div>
 
     <?php
-
-    if (isset($_POST['btnSupprimerUtilisateurs'])) {
-        $sql3 = "DELETE from utilisateurs where Creation < now() - interval 3 month and Statut = 0";
-        $resultat3 = $conn->query($sql3);
-
-        if ($resultat3) {
-            header("Location: ModuleAdmin.php");
-        } else {
-            echo "Error: " . $sql3 . "<br>" . $conn->error;
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['btnSupprimerUtilisateurs'])) {
+            $sql3 = "DELETE FROM utilisateurs 
+                     WHERE Creation < NOW() - INTERVAL 3 MONTH AND Statut = 0";
+            if ($conn->query($sql3) === TRUE) {
+                header("Location: ModuleAdmin.php");
+                exit;
+            } else {
+                echo "Error: " . $sql3 . "<br>" . $conn->error;
+            }
+        }
+        if (isset($_POST['btnSupprimerAnnonces'])) {
+            $sql4 = "DELETE FROM annonces 
+                     WHERE Etat = 3";
+            if ($conn->query($sql4) === TRUE) {
+                header("Location: ModuleAdmin.php");
+                exit;
+            } else {
+                echo "Error: " . $sql4 . "<br>" . $conn->error;
+            }
         }
     }
-    if (isset($_POST['btnSupprimerAnnonces'])) {
-        $sql4 = "DELETE from annonces where Etat = 3";
-        $resultat4 = $conn->query($sql4);
 
-        if ($resultat4) {
-            header("Location: ModuleAdmin.php");
-        } else {
-            echo "Error: " . $sql4 . "<br>" . $conn->error;
-        }
-    }
-
+    $conn->close();
     ?>
 
-    <script>
-        function confirmSupprimerUtilisateur() {
-            return confirm("Voulez-vous supprimer les utilisateurs inactifs ?")
-        }
-    </script>
-
 </body>
+
+</html>
