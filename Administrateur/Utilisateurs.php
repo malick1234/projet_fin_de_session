@@ -74,9 +74,9 @@ require_once "ConnexionBD.php";
                                 $nom = $util->Nom;
                                 $prenom = $util->Prenom;
 
-                                $telMaison = $util->NoTelMaison ?? 'N/A';
-                                $telTravail = $util->NoTelTravail ?? 'N/A';
-                                $telCellulaire = $util->NoTelCellulaire ?? 'N/A';
+                                $telMaison = $util->NoTelMaison ;
+                                $telTravail = $util->NoTelTravail ;
+                                $telCellulaire = $util->NoTelCellulaire ;
                                 $dateMod = $util->Modification;
                                 ?>
                                 <tr>

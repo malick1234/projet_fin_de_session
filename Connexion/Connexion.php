@@ -2,12 +2,9 @@
 <html lang="fr">
 <?php
 session_start();
-if (isset($_SESSION["ok"]))
-  header("Location: ../Annonces/Annonces.php");
-?>
-<?php require_once "navigationPreConnexion.php";
+
+require_once "navigationPreConnexion.php";
 require_once "ConnexionBD.php";
-//require_once "creationBD.php";
 ?>
 
 <head>
@@ -94,22 +91,22 @@ require_once "ConnexionBD.php";
         $int = $row["NbConnexions"] + 1;
         mysqli_query($cBD, "UPDATE utilisateurs SET Nbconnexions = $int where Courriel='$email'");
         //
-        if ($row["Nom"] != null && $row["Prenom"] != null) {
+        if ($row["Statut"] == 1) {
           ?>
           <script type="text/javascript">
-            window.location.href = 'http://localhost/projet_fin_de_session/Annonces/Annonces.php';
+            header('Location:../Administrateur/ModuleAdmin.php');
           </script>
           <?php
-        } else if ($row["Statut"] == 1) {
+        } else if ($row["Nom"] != null && $row["Prenom"] != null) {
           ?>
             <script type="text/javascript">
-              window.location.href = 'http://localhost/projet_fin_de_session/Administrateur/ModuleAdmin.php';
+              header('Location:../Annonces/Annonces.php');
             </script>
           <?php
         } else {
           ?>
             <script type="text/javascript">
-              window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ProfilUtilisateur.php';
+              header('Location:../Annonces/ProfilUtilisateur.php');
             </script>
           <?php
         }
@@ -120,6 +117,7 @@ require_once "ConnexionBD.php";
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
         window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Connexion.php';
+        header('Location:../Connexion/Connexion.php');
       </script>
       <?php
     }
@@ -130,7 +128,7 @@ require_once "ConnexionBD.php";
   <br>
   <div class="container col-md-6 jumbotron">
     <h2 class="text-center">Connexion</h2>
-    <form method="POST" action="Connexion.php" id="formConnexion">
+    <form method="POST" action="" id="formConnexion">
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Courriel</label>
