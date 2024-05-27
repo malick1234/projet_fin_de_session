@@ -2,8 +2,6 @@
 <html lang="fr">
 <?php
 session_start();
-if (isset($_SESSION["ok"]))
-  header("Location: ../Annonces/Annonces.php");
 ?>
 <?php require_once "navigationPreConnexion.php";
 require_once "ConnexionBD.php";
@@ -96,19 +94,20 @@ require_once "ConnexionBD.php";
         if ($row["Statut"] == 1) {
           ?>
           <script type="text/javascript">
-            header("Location: ../Administrateur/ModuleAdmin.php");
+            header("Location: http://abelmalick.alwaysdata.net/Administrateur/ModuleAdmin.php");
           </script>
           <?php
         } else if ($row["Statut"] == 9) {
           ?>
             <script type="text/javascript">
-              header("Location: ../Annonces/ProfilUtilisateur.php");
+              header("Location: http://abelmalick.alwaysdata.net/Annonces/ProfilUtilisateur.php");
             </script>
           <?php
-        } else if ($row["Nom"] != null && $row["Prenom"] != null) {
+        } else if ($row["Statut"] != 0) {
           ?>
               <script type="text/javascript">
-                header("Location: ../Annonces/Annonces.php");
+                alert("hello!");
+                header("Location: http://abelmalick.alwaysdata.net/Annonces/Annonces.php");
               </script>
           <?php
         }
@@ -118,7 +117,7 @@ require_once "ConnexionBD.php";
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        header("Location: ../Connexion/Connexion.php");
+        header("Location: http://abelmalick.alwaysdata.net/Connexion/Connexion.php");
       </script>
       <?php
     }
@@ -129,7 +128,7 @@ require_once "ConnexionBD.php";
   <br>
   <div class="container col-md-6 jumbotron">
     <h2 class="text-center">Connexion</h2>
-    <form method="POST" action="Connexion.php" id="formConnexion">
+    <form method="POST" action="" id="formConnexion">
       <div class="form-row">
         <div class="form-group col-md-12">
           <label>Courriel</label>

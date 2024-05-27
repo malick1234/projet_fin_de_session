@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION["ok"])) {
+if (isset($_SESSION["ok"])) {
     header('Location: ../Connexion/Connexion.php');
 }
 require_once "navigationAnnonce.php";

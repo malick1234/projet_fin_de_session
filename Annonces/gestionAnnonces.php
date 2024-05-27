@@ -105,7 +105,7 @@ $query = mysqli_query($cBD, "SELECT annonces.*, categories.Description AS Catego
                     Nom de l'auteur: <?= $row['Nom'] . " " . $row['Prenom'] ?>
                 <?php } ?></div>
                 <div class="p-1">Catégorie: <?= $row['CategorieDescription'] ?></div>
-                <div class="p-1">Description:<a href="detailsAnnonce.php"> <?= $row['DescriptionAbregee'] ?></a></div>
+                <div class="p-1">Description:<a href="detailsAnnonce.php?id=<?= $row['NoAnnonce'] ?>"> <?= $row['DescriptionAbregee'] ?></a></div>
                 <div class="p-1"><?php if ($row['Etat'] == 1) { ?>
                     État: Actif
                 <?php } else if ($row['Etat'] == 2) { ?>
