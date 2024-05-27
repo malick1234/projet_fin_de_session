@@ -111,7 +111,7 @@
                 ?>
                 <script type="text/javascript">
                     alert("Erreur! un problème est survenue avec votre image. Vérifier que la taille est inférieur à 601 pixel.");
-                    window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ajoutAnnonce.php';
+                    header('Location: ../Annonces/ajoutAnnonce.php');
                 </script>
                 <?php
 
@@ -119,7 +119,7 @@
                 ?>
                 <script type="text/javascript">
                     alert("Erreur! un problème est survenue avec votre image.");
-                    window.location.href = 'http://localhost/projet_fin_de_session/Annonces/ajoutAnnonce.php';
+                    header('Location: ../Annonces/ajoutAnnonce.php');
                 </script>
                 <?php
             }

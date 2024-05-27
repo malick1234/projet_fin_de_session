@@ -21,9 +21,9 @@ CREATE TABLE utilisateurs (
     CHECK (Statut IN (0, 1, 2, 3, 4, 5, 9)),
     CHECK (NoEmpl BETWEEN 1 AND 9999),
     CHECK (MotDePasse REGEXP '^[A-Za-z0-9]{5,15}$'),
-    CHECK (NoTelMaison REGEXP '^\\(\\d{3}\\) \\d{3}-\\d{4}[PN]$'),
-    CHECK (NoTelTravail REGEXP '^\\(\\d{3}\\) \\d{3}-\\d{4} #\\d{4}[PN]$'),
-    CHECK (NoTelCellulaire REGEXP '^\\(\\d{3}\\) \\d{3}-\\d{4}[PN]$')
+    CHECK (NoTelMaison REGEXP '^$|^\\(\\d{3}\\) \\d{3}-\\d{4}[PN]$'),
+    CHECK (NoTelTravail REGEXP '^$|^\\(\\d{3}\\) \\d{3}-\\d{4} #\\d{4}[PN]$'),
+    CHECK (NoTelCellulaire REGEXP '^$|^\\(\\d{3}\\) \\d{3}-\\d{4}[PN]$')
 );
 
 -- Ajout de l'utilisateur administrateur

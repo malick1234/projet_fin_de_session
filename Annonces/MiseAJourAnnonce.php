@@ -61,7 +61,10 @@
     require_once "navigationGestionAnnonce.php";
     require_once "ConnexionBD.php";
     session_start();
-
+    if (!isset($_SESSION["ok"])) {
+        header('Location: ../Connexion/Connexion.php');
+    }
+    
     $cBD = mysqli_connect($servername, $username, $password, $dbname);
     $strEmail = $_SESSION["courriel"];
 

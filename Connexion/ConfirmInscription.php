@@ -75,7 +75,7 @@ require_once "ConnexionBD.php";
                     <title>Confirmation du courriel</title>
                   </head>
                   <body>
-                    <a href='http://localhost/Projet_Fin_De_Session/Connexion/validationReussi.php?nbValidation=$nbValidation&strMail=$strEmail' class='nav-item nav-link'>Cliquer ici pour confirmer le courriel</a>
+                    <a href='http://abelmalick.alwaysdata.net/Connexion/validationReussi.php?nbValidation=$nbValidation&strMail=$strEmail' class='nav-item nav-link'>Cliquer ici pour confirmer le courriel</a>
                   </body>
                   </head>
                   ";
@@ -91,7 +91,7 @@ require_once "ConnexionBD.php";
             ?>
             <script type="text/javascript">
               alert("Erreur lors de la création du compte\nEmail déjà utilisé");
-              window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Inscription.php';
+              window.location.href = 'http://abelmalick.alwaysdata.net/Connexion/Inscription.php';
             </script>
             <?php
           }
