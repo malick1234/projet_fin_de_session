@@ -1,0 +1,11 @@
+NoUtilisateur,Parution,Categorie,DescriptionAbregee,DescriptionComplete,Prix,Photo,Etat
+1,2024-05-24 10:00:00,1,"Location Abregee 1","Location Complete 1",100.00,"photo1.jpg",1
+2,2024-05-24 11:00:00,2,"Recherche Abregee 2","Recherche Complete 2",200.00,"photo2.jpg",2
+3,2024-05-24 12:00:00,3,"À vendre Abregee 3","À vendre Complete 3",300.00,"photo3.jpg",3
+4,2024-05-24 13:00:00,4,"À donner Abregee 4","À donner Complete 4",0.00,"photo4.jpg",1
+5,2024-05-24 14:00:00,5,"Service offert Abregee 5","Service offert Complete 5",150.00,"photo5.jpg",2
+6,2024-05-24 15:00:00,6,"Autre Abregee 6","Autre Complete 6",250.00,"photo6.jpg",3
+7,2024-05-24 16:00:00,1,"Location Abregee 7","Location Complete 7",110.00,"photo7.jpg",1
+8,2024-05-24 17:00:00,2,"Recherche Abregee 8","Recherche Complete 8",220.00,"photo8.jpg",2
+9,2024-05-24 18:00:00,3,"À vendre Abregee 9","À vendre Complete 9",330.00,"photo9.jpg",3
+10,2024-05-24 19:00:00,4,"À donner Abregee 10","À donner Complete 10",0.00,"photo10.jpg",1
