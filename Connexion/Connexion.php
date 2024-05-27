@@ -94,19 +94,19 @@ require_once "ConnexionBD.php";
         if ($row["Statut"] == 1) {
           ?>
           <script type="text/javascript">
-            header('Location:../Administrateur/ModuleAdmin.php');
+            window.location.href = 'http://abelmalick.alwaysdata.net/Administrateur/ModuleAdmin.php';
           </script>
           <?php
         } else if ($row["Nom"] != null && $row["Prenom"] != null) {
           ?>
             <script type="text/javascript">
-              header('Location:../Annonces/Annonces.php');
+              window.location.href = 'http://abelmalick.alwaysdata.net/Annonces/Annonces.php';
             </script>
           <?php
         } else {
           ?>
             <script type="text/javascript">
-              header('Location:../Annonces/ProfilUtilisateur.php');
+              window.location.href = 'http://abelmalick.alwaysdata.net/Annonces/ProfilUtilisateur.php';
             </script>
           <?php
         }
@@ -116,7 +116,7 @@ require_once "ConnexionBD.php";
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        header('Location:../Connexion/Connexion.php');
+        window.location.href = 'http://abelmalick.alwaysdata.net/Connexion/Connexion.php';
       </script>
       <?php
     }
