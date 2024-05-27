@@ -101,12 +101,7 @@ require_once "ConnexionBD.php";
       }
     } else {
       echo $row;
-      ?>
-      <script type="text/javascript">
-        alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        header('../Connexion/Connexion.php');
-      </script>
-      <?php
+      header('../Connexion/Connexion.php');
     }
     mysqli_close($cBD);
   }
