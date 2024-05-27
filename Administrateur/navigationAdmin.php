@@ -4,7 +4,7 @@
       <a class="nav-link" href="ModuleAdmin.php">Affichage de toutes les annonces</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="Utilisateurs.php">Affichage de toutes les utilisateurs</a>
+      <a class="nav-link" href="Utilisateurs.php">Affichage de tous les utilisateurs</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="NettoyageBD.php">Nettoyage de la base de données</a>
