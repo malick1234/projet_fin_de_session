@@ -116,7 +116,6 @@ require_once "ConnexionBD.php";
       ?>
       <script type="text/javascript">
         alert("Veuillez vérifier votre courriel et/ou votre mot de passe");
-        window.location.href = 'http://localhost/projet_fin_de_session/Connexion/Connexion.php';
         header('Location:../Connexion/Connexion.php');
       </script>
       <?php
