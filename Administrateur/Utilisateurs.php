@@ -5,7 +5,9 @@
 session_start();
 if (!isset($_SESSION["ok"])) {
     header('Location: ../Connexion/Connexion.php');
+    exit;
 }
+require_once "ConnexionBD.php";
 
 ?>
 
@@ -19,14 +21,14 @@ if (!isset($_SESSION["ok"])) {
 </head>
 
 <body>
-    <?php require_once "navigationAdmin.php" ?>
+    <?php require_once "navigationAdmin.php"; ?>
     <h1 class="text-center">Affichage des utilisateurs</h1>
     <div class="container-fluid">
         <div class="card text-white bg-info mb-3">
             <div class="card-header">Liste des utilisateurs</div>
             <div class="card">
                 <table class="table text-center">
-                    <tbody>
+                    <thead>
                         <tr>
                             <th>Numéro d'utilisateur</th>
                             <th>Courriel</th>
@@ -44,17 +46,20 @@ if (!isset($_SESSION["ok"])) {
                             <th>Déconnexions récentes</th>
                             <th>Nombre d'annonces</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         <?php
+                        require_once ("connexionBD.php");
 
-                        require $_SERVER['DOCUMENT_ROOT'] . "ConnexionBD.php";
+                        $conn = new mysqli($servername, $username, $password, $dbname);
 
-                        $conn = new mysqli($SERVER, $USER, $PASSWORD, $DATABASE);
-                        // Check connection
                         if ($conn->connect_error) {
                             die("Connection failed: " . $conn->connect_error);
                         }
 
-                        $sql = "SELECT * from utilisateurs";
+                        $sql = "SELECT NoUtilisateur, Courriel, Creation, NbConnexions, Statut, NoEmpl, Nom, Prenom, NoTelMaison, NoTelTravail, NoTelCellulaire, Modification
+                                FROM utilisateurs
+                                ORDER BY Nom ASC, Prenom ASC";
 
                         $resultat = $conn->query($sql);
 
@@ -70,20 +75,8 @@ if (!isset($_SESSION["ok"])) {
                                 $prenom = $util->Prenom;
 
                                 $telMaison = $util->NoTelMaison ?? 'N/A';
-                                if ($telMaison != 'N/A') {
-                                    $telMaison = substr($util->NoTelMaison, 0, -1);
-                                }
-
                                 $telTravail = $util->NoTelTravail ?? 'N/A';
-                                if ($telTravail != 'N/A') {
-                                    $telTravail = substr($util->NoTelTravail, 0, strlen($util->NoTelTravail) - 5);
-                                }
-
                                 $telCellulaire = $util->NoTelCellulaire ?? 'N/A';
-                                if ($telCellulaire != 'N/A') {
-                                    $telCellulaire = substr($util->NoTelCellulaire, 0, -1);
-                                }
-
                                 $dateMod = $util->Modification;
                                 ?>
                                 <tr>
@@ -102,19 +95,17 @@ if (!isset($_SESSION["ok"])) {
                                     <td>
                                         <ol>
                                             <?php
-                                            $sql2 = "SELECT Connexion from connexions 
-                                    where NoUtilisateur = '$no'
-                                    order by Connexion desc
-                                    limit 5;";
-
+                                            $sql2 = "SELECT Connexion FROM connexions 
+                                                     WHERE NoUtilisateur = '$no'
+                                                     ORDER BY Connexion DESC
+                                                     LIMIT 5";
                                             $resultat2 = $conn->query($sql2);
-
                                             if ($resultat2) {
                                                 while ($connexion = mysqli_fetch_object($resultat2)) {
                                                     echo "<li>" . $connexion->Connexion . "</li>";
                                                 }
                                             } else {
-                                                echo "Error: " . $sql . "<br>" . $conn->error;
+                                                echo "<li>N/A</li>";
                                             }
                                             ?>
                                         </ol>
@@ -122,68 +113,39 @@ if (!isset($_SESSION["ok"])) {
                                     <td>
                                         <ol>
                                             <?php
-                                            $sql3 = "SELECT Deconnexion from connexions 
-                                    where NoUtilisateur = '$no'
-                                    order by Connexion desc
-                                    limit 5";
-
+                                            $sql3 = "SELECT Deconnexion FROM connexions 
+                                                     WHERE NoUtilisateur = '$no'
+                                                     ORDER BY Connexion DESC
+                                                     LIMIT 5";
                                             $resultat3 = $conn->query($sql3);
-
                                             if ($resultat3) {
-                                                while ($connexion = mysqli_fetch_object($resultat3)) {
-                                                    if (is_null($connexion->Deconnexion)) {
-                                                        echo "<li> N/A </li> <br>";
+                                                while ($deconnexion = mysqli_fetch_object($resultat3)) {
+                                                    if (is_null($deconnexion->Deconnexion)) {
+                                                        echo "<li>N/A</li>";
                                                     } else {
-                                                        echo "<li>" . $connexion->Deconnexion . "</li>";
+                                                        echo "<li>" . $deconnexion->Deconnexion . "</li>";
                                                     }
-
                                                 }
                                             } else {
-                                                echo "Error: " . $sql . "<br>" . $conn->error;
+                                                echo "<li>N/A</li>";
                                             }
                                             ?>
                                         </ol>
                                     </td>
                                     <td>
                                         <?php
-                                        for ($i = 1; $i < 4; $i++) {
-                                            $sql4 = "SELECT Etat, count(*) as 'nbAnnonces'
-                                        from annonces
-                                        where NoUtilisateur = '$no' and Etat = '$i'
-                                        group by Etat, NoUtilisateur
-                                        order by NoUtilisateur";
-
+                                        $etatAnnonces = ['1' => 'Actives', '2' => 'Inactives', '3' => 'Retirées'];
+                                        foreach ($etatAnnonces as $etat => $label) {
+                                            $sql4 = "SELECT COUNT(*) AS nbAnnonces
+                                                     FROM annonces
+                                                     WHERE NoUtilisateur = '$no' AND Etat = '$etat'";
                                             $resultat4 = $conn->query($sql4);
-
-                                            if (mysqli_num_rows($resultat4) != 0) {
-                                                while ($annonces = mysqli_fetch_object($resultat4)) {
-                                                    $etat = $annonces->Etat;
-                                                    $nbAnnonces = $annonces->nbAnnonces;
-
-                                                    if ($etat == 1) {
-                                                        echo "Actives: " . $nbAnnonces . "<br>";
-                                                    } else if ($etat == 2) {
-                                                        echo "Inactives: " . $nbAnnonces . "<br>";
-                                                    } else if ($etat == 3) {
-                                                        echo "Retirées: " . $nbAnnonces . "<br>";
-                                                    }
-
-                                                }
+                                            if ($resultat4 && $annonces = mysqli_fetch_object($resultat4)) {
+                                                echo "$label: " . $annonces->nbAnnonces . "<br>";
                                             } else {
-                                                switch ($i) {
-                                                    case 1:
-                                                        echo "Actives: 0 <br>";
-                                                        break;
-                                                    case 2:
-                                                        echo "Inactives: 0 <br>";
-                                                        break;
-                                                    case 3:
-                                                        echo "Retirées: 0 <br>";
-                                                        break;
-                                                }
+                                                echo "$label: 0 <br>";
                                             }
                                         }
-
                                         ?>
                                     </td>
                                 </tr>
@@ -193,7 +155,6 @@ if (!isset($_SESSION["ok"])) {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                         }
                         $conn->close();
-
                         ?>
                     </tbody>
                 </table>
@@ -201,3 +162,5 @@ if (!isset($_SESSION["ok"])) {
         </div>
     </div>
 </body>
+
+</html>
