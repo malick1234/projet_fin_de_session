@@ -94,7 +94,7 @@ require_once "ConnexionBD.php";
         if ($row["Statut"] == 1) {
           ?>
           <script type="text/javascript">
-            window.location.href = '../Administrateur/ModuleAdmin.php';
+            header('Location: ../Administrateur/ModuleAdmin.php');
           </script>
           <?php
         } else if ($row["Nom"] != null && $row["Prenom"] != null) {
